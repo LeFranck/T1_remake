@@ -1,0 +1,127 @@
+#include "telar.h"
+#include "linea.h"
+#include "color.h"
+#include <stdio.h>
+
+
+Telar* init_telar(int l_c, int c_c, int c_m)
+{
+	Telar* r = malloc(sizeof(Telar));
+	r->lineas = malloc(sizeof(Linea*)*l_c);
+	r->colores = malloc(sizeof(Color)*c_c);
+	r->index_en_lineas_por_color = malloc(sizeof(int)*c_c);
+	r->estados_de_lineas = malloc(sizeof(char)*l_c);
+	r->lineas_count = l_c;
+	r->colores_count = c_c;
+	r->c_m = c_m;
+	return r;
+}
+
+Telar* create_telar(Layout* l)
+{
+	int bc = 0;
+	int c_m = 0;
+	int l_c = 0;
+	int c_c = 0;
+	char* colores = malloc(sizeof(char)*7);
+	int k = 0;
+	int lineas_flotantes_count = 0;
+
+	int i = 0;
+	int j = 0;
+	for(i = 0; i < l->zone_count; i++)
+	{
+		bc = bc + l->zones[i]->building_count;
+		for(j = 0; j < l->zones[i]->building_count; j++)
+		{
+			if(l->zones[i]->buildings[j]->color!=0 && city_client_is_taken(l->zones[i]->buildings[j]))
+			{
+				lineas_flotantes_count++;
+			}
+		}
+	}
+
+	c_m = bc/2;
+
+	for(i = 0; i < l->core_count; i++)
+	{
+		l_c = l_c + l->cores[i]->buildings[0]->link_count;
+		if(colores[l->cores[i]->buildings[0]->color]!='T')
+		{
+			colores[l->cores[i]->buildings[0]->color]='T';
+		}
+	}
+
+	l_c = l_c + lineas_flotantes_count;
+	for(i = 0; i < 7; i++)
+	{
+		if(colores[i]=='T'){c_c++;}
+	}
+	
+	Telar* r = init_telar(l_c,c_c,c_m);
+
+	for(i = 0; i < l->core_count; i++)
+	{
+		for(j = 0; j < l->cores[i]->buildings[0]->link_count; j++)
+		{
+			// z, b, x e y 
+			Posicion* p = create_posicion(l->cores[i]->buildings[0]->linked[j]->zone->index
+											,l->cores[i]->buildings[0]->linked[j]->index,
+											l->cores[i]->buildings[0]->linked[j]->zone->x,
+											l->cores[i]->buildings[0]->linked[j]->zone->y);
+			r->lineas[k] = create_linea(l->cores[i]->buildings[0]->linked[j]->color,k, 'T', p);
+			k++;
+		}
+	}
+	
+	if(lineas_flotantes_count > 0)
+	{
+		for(i = 0; i < l->zone_count; i++)
+		{
+			for(j = 0; j < l->zones[i]->building_count; j++)
+			{
+				if(l->zones[i]->buildings[j]->color!=0 && city_client_is_taken(l->zones[i]->buildings[j]))
+				{
+					// z, b, x e y 
+					Posicion* p = create_posicion( i, j ,l->zones[i]->x,l->zones[i]->y);
+					r->lineas[k] = create_linea(l->zones[i]->buildings[j]->color,k, 'F', p);
+					k++;
+				}
+			}
+		}
+	}
+	return r;
+}
+
+
+void juntar_lineas_por_color(Telar* t)
+{
+
+}
+
+void print_telar(Telar* t)
+{
+	int i = 0;
+	fprintf(stderr,"Se imprimira el telar\n");
+	fprintf(stderr,"\n");
+	for(i = 0; i < t->lineas_count; i++)
+	{
+		print_linea(t->lineas[i]);
+	}
+}
+
+void destroy_telar(Telar* t)
+{
+
+	int i = 0;
+	for(i = 0; i < t->lineas_count; i++)
+	{
+		free(t->lineas[i]);
+	}
+	free(t->lineas);
+	free(t->colores);
+	free(t->lineas_por_color);
+	free(t->index_en_lineas_por_color);
+	free(t->estados_de_lineas);
+	free(t);
+}
