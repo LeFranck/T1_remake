@@ -39,6 +39,8 @@ void retroceder_linea(Master* m, Linea* l);
 
 void avanzar_linea(Master* m, Linea* l);
 
+void juntar_lineas_por_color(Master* m);
+
 void destroy_master(Master* m);
 
 #endif

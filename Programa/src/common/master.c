@@ -110,6 +110,31 @@ void avanzar_linea(Master* m, Linea* l)
 
 }
 
+void juntar_lineas_por_color(Master* m)
+{
+	Telar* r = clon_telar(m->t);
+	int i = 0;
+	int j = 0;
+	int index = 0;
+	int line_count = 0;
+	for(i = 0; i < r->colores_count; i++)
+	{
+		index = 0;
+		for(j = 0; j < r->lineas_por_color[i]; j++)
+		{
+			while(m->t->lineas[index]->color != r->colores[i])
+			{
+				index++;
+			}
+			r->lineas[line_count] = m->t->lineas[index];
+			r->lineas[line_count]->number = line_count;
+			line_count++;
+			index++;
+		}
+	}
+	m->t = r;
+}
+
 void destroy_master(Master* m)
 {
 	destroy_solucion(m->s);

@@ -23,8 +23,6 @@ Telar* init_telar(int l_c, int c_c, int c_m, char* colores, int* cantidad_por_co
 
 Telar* create_telar(Layout* l);
 
-void juntar_lineas_por_color(Telar* t);
-
 void ordenar_colores(Telar* t);
 
 void set_lines_goals(Telar* t);

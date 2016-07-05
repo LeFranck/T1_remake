@@ -30,6 +30,20 @@ Telar* init_telar(int l_c, int c_c, int c_m, char* colores, int* cantidad_por_co
 	return r;
 }
 
+Telar* clon_telar(Telar* t)
+{
+	Telar* r = malloc(sizeof(Telar));
+	r->lineas = malloc(sizeof(Linea*)*t->lineas_count);
+	r->colores = t->colores;
+	r->lineas_por_color = t->lineas_por_color;
+	r->index_en_lineas_por_color = t->index_en_lineas_por_color;
+	r->estados_de_lineas = t->estados_de_lineas;
+	r->lineas_count = t->lineas_count;
+	r->colores_count = t->colores_count;
+	r->c_m = t->c_m;
+	return r;
+}
+
 Telar* create_telar(Layout* l)
 {
 	int bc = 0;
@@ -66,7 +80,7 @@ Telar* create_telar(Layout* l)
 	for(i = 0; i < l->core_count; i++)
 	{
 		l_c = l_c + l->cores[i]->buildings[0]->link_count;
-		cantidad_por_color[l->cores[i]->buildings[0]->color-1]++;
+		cantidad_por_color[l->cores[i]->buildings[0]->color-1]+=l->cores[i]->buildings[0]->link_count;
 		if(colores[l->cores[i]->buildings[0]->color-1]!='T')
 		{
 			colores[l->cores[i]->buildings[0]->color-1]='T';
@@ -140,11 +154,6 @@ void ordenar_colores(Telar* t)
 		t->colores[index_min] = aux_c;
 		min = 1000000;
 	}
-
-}
-
-void juntar_lineas_por_color(Telar* t)
-{
 
 }
 
