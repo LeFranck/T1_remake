@@ -15,4 +15,6 @@ typedef struct solucion Solucion;
 
 Solucion* create_solucion(int c_m);
 
+void destroy_solucion(Solucion* s);
+
 #endif

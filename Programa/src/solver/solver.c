@@ -17,6 +17,8 @@ int main(int argc, char const *argv[])
 	/* TODO RESOLVER PROBLEMA */
 	Master* m = create_master(layout);
 	print_telar(m->t);
+	ordenar_colores(m->t);
+	print_telar_colores(m->t);
 
 	/* TODO IMPRIMIR DECISIONES */
 

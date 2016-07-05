@@ -25,6 +25,7 @@ void print_linea(Linea* l)
 	//fprintf(stderr,"\tdirection x: %d\n",l->direction_x);
 	//fprintf(stderr,"\tdirection y: %d\n",l->direction_y);
 	fprintf(stderr,"\tcolor: %d",l->color);
+	fprintf(stderr,"\talimentada: %c",l->alimentada);
 	fprintf(stderr,"\n");
 
 }

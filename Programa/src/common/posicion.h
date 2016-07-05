@@ -15,7 +15,7 @@ typedef struct posicion Posicion;
 
 Posicion* create_posicion(int z, int b, int x, int y);
 
-int direccion_desde(Posicion* a, Posicion* b);
+double direccion_desde(Posicion* a, Posicion* b);
 
 int distancia_entre(Posicion* a, Posicion* b);
 

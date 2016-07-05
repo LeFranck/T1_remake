@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "posicion.h"
 #include "color.h"
+#include "nodo_backtracking.h"
 
 struct linea
 {
@@ -11,6 +12,7 @@ struct linea
 	char isReady;
 	char alimentada;
 	char deadEnd;
+	char dead;
 	int number;
 	int largo;
 
@@ -29,6 +31,8 @@ struct linea
 
 	Posicion* inicio;
 	Posicion* cabeza;
+
+	NodoBacktracking* actual;
 };
 
 typedef struct linea Linea;

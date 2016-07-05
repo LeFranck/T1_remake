@@ -27,5 +27,7 @@ typedef struct stats Stats;
 
 Stats* create_stats(Telar* t);
 
+void destroy_stats(Stats* s);
+
 #endif
 

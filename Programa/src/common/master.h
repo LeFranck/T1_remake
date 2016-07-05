@@ -5,7 +5,6 @@
 #include "stats.h"
 #include "solucion.h"
 
-
 struct master
 {
 	Layout* l;
@@ -31,6 +30,14 @@ void tejer(Master* m);
 void descocer(Master* m);
 
 void conectar_linea(Master* m, Linea* a);
+
+void mover_linea(Master* m,Linea* l);
+
+void calcular_opciones_linea(Master* m, Linea* l);
+
+void retroceder_linea(Master* m, Linea* l);
+
+void avanzar_linea(Master* m, Linea* l);
 
 void destroy_master(Master* m);
 

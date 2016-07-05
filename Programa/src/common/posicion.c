@@ -1,5 +1,7 @@
 #include "posicion.h"
 #include <stdio.h>
+#include <math.h>
+
 
 Posicion* create_posicion(int z, int b, int x, int y)
 {
@@ -11,24 +13,37 @@ Posicion* create_posicion(int z, int b, int x, int y)
 	return r;
 }
 
-int direccion_desde(Posicion* a, Posicion* b)
+double direccion_desde(Posicion* a, Posicion* b)
 {
-	return 0;
+	double dist_x = b->x - a->x;
+	double dist_y = b->y - b->x;
+	double r = 0.0;
+	if(dist_y!=0.0)
+	{
+		//retorna en grados
+		r = atan(dist_x/dist_y)*57.23;
+	}
+	return r;
 }
 
 int distancia_entre(Posicion* a, Posicion* b)
 {
-	return 0;
+	int x = pow((a->x - b->x),2);
+	int y = pow((a->y - b->y),2);
+	int r = sqrt(x+y);
+	return r;
 }
 
 int dist_x(Posicion* a, Posicion* b)
 {
-	return 0;
+	int r = b->x - a->x;
+	return r;
 }
 
 int dist_y(Posicion* a, Posicion* b)
 {
-	return 0;
+	int r = b->y - a->y;
+	return r;
 }
 
 void print_posicion(Posicion* p)

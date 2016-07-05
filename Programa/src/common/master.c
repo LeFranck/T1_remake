@@ -2,6 +2,7 @@
 #include "telar.h"
 #include "solucion.h"
 #include "stats.h"
+#include "nodo_backtracking.h"
 
 Master* create_master(Layout* l)
 {
@@ -58,12 +59,61 @@ void descocer(Master* m)
 
 }
 
-void conectar_linea(Master* m, Linea* a)
+void conectar_linea(Master* m, Linea* l)
 {
+	if(l->isReady!='T')
+	{
+		l->actual = create_nodo_backtracking(l->number);
+	}
+	while(l->isReady!='T' || l->dead!='T')
+	{
+		mover_linea(m,l);
+	}
+	if(l->isReady=='T')
+	{
+		//R de ready
+		m->t->estados_de_lineas[l->number] = 'R';
+		m->t->estados_de_lineas[l->goal] = 'R';
+	}else{
+		//D de dead
+		m->t->estados_de_lineas[l->number] = 'D';
+		m->t->estados_de_lineas[l->number] = 'D';
+	}
+	//Podriamos eliminar el nodo backtracking de cada linea
+}
+
+void mover_linea(Master* m,Linea* l)
+{
+	calcular_opciones_linea(m,l);
+	if(l->deadEnd == 'T')
+	{
+		retroceder_linea(m,l);
+	}else{
+		avanzar_linea(m,l);
+	}
+}
+
+void calcular_opciones_linea(Master* m, Linea* l)
+{
+
+}
+
+void retroceder_linea(Master* m, Linea* l)
+{
+
+
+}
+
+void avanzar_linea(Master* m, Linea* l)
+{
+
 
 }
 
 void destroy_master(Master* m)
 {
-
+	destroy_solucion(m->s);
+	destroy_stats(m->stats);
+	destroy_telar(m->t);
+	free(m);
 }
