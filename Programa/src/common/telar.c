@@ -157,6 +157,48 @@ void ordenar_colores(Telar* t)
 
 }
 
+void set_lines_goals(Telar* t)
+{
+	int i = 0;
+	for(i = 0; i < t->colores_count; i++)
+	{
+		fprintf(stderr,"Set line goals line %d \n",i);
+		set_lines_goals_color(t, i);
+	}
+}
+
+void set_lines_goals_color(Telar* t, int i)
+{
+	set_lines_distancia_otras_lineas(t, i);
+	int k = 0;
+	for(k = 0; k < t->lineas_por_color[i]; k++)
+	{
+		set_goal_linea(t->lineas[t->index_en_lineas_por_color[i]+k], t->lineas_por_color[i], t->index_en_lineas_por_color[i]);
+	}	
+}
+
+void set_lines_distancia_otras_lineas(Telar* t, int i)
+{
+	// i es el numero en el index colores(estamos seteando la distancia de ese color)
+	int j = 0;
+	int k = 0;
+	for(j = 0; j < t->lineas_por_color[i]; j++)
+	{
+		t->lineas[t->index_en_lineas_por_color[i]+j]->distancia_otras_lineas = malloc(sizeof(double)*t->lineas_por_color[i]);
+		for(k = 0; k < t->lineas_por_color[i]; k++)
+		{
+			if(k==j)
+			{
+				t->lineas[t->index_en_lineas_por_color[i]+j]->distancia_otras_lineas[k] = -1.0;
+			}else{
+				double dist = distancia_entre(t->lineas[t->index_en_lineas_por_color[i]+j]->cabeza, t->lineas[t->index_en_lineas_por_color[i]+k]->cabeza);
+				t->lineas[t->index_en_lineas_por_color[i]+j]->distancia_otras_lineas[k] = dist;
+			}
+		}
+	}
+}
+
+
 void print_telar(Telar* t)
 {
 	int i = 0;

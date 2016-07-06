@@ -119,6 +119,7 @@ void juntar_lineas_por_color(Master* m)
 	int line_count = 0;
 	for(i = 0; i < r->colores_count; i++)
 	{
+		m->t->index_en_lineas_por_color[i] = line_count; 
 		index = 0;
 		for(j = 0; j < r->lineas_por_color[i]; j++)
 		{

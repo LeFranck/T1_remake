@@ -17,7 +17,7 @@ Posicion* create_posicion(int z, int b, int x, int y);
 
 double direccion_desde(Posicion* a, Posicion* b);
 
-int distancia_entre(Posicion* a, Posicion* b);
+double distancia_entre(Posicion* a, Posicion* b);
 
 int dist_x(Posicion* a, Posicion* b);
 

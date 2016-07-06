@@ -26,11 +26,11 @@ double direccion_desde(Posicion* a, Posicion* b)
 	return r;
 }
 
-int distancia_entre(Posicion* a, Posicion* b)
+double distancia_entre(Posicion* a, Posicion* b)
 {
-	int x = pow((a->x - b->x),2);
-	int y = pow((a->y - b->y),2);
-	int r = sqrt(x+y);
+	double x = pow((a->x - b->x),2);
+	double y = pow((a->y - b->y),2);
+	double r = sqrt(x+y);
 	return r;
 }
 

@@ -22,8 +22,12 @@ struct linea
 
 	//meta de la linea, goal es el numero de la linea meta
 	int goal;
-	int direction_x;
-	int direction_y;
+	double direccion;
+	double* distancia_otras_lineas;
+	int* lineas_compatibles;
+	int* posibles_metas;
+	//int direction_x;
+	//int direction_y;
 
 	//Data asociada con la linea
 	int inicio_solucion;
@@ -38,6 +42,8 @@ struct linea
 typedef struct linea Linea;
 
 Linea* create_linea(Color c, int number, char alimentada, Posicion* inicio);
+
+void set_goal_linea(Linea* l, int l_comp_count, int index_en_telar);
 
 void print_linea(Linea* l);
 

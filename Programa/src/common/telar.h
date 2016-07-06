@@ -27,6 +27,10 @@ void ordenar_colores(Telar* t);
 
 void set_lines_goals(Telar* t);
 
+void set_lines_goals_color(Telar* t, int i);
+
+void set_lines_distancia_otras_lineas(Telar* t, int i);
+
 void print_telar(Telar* t);
 
 void print_telar_colores(Telar* t);

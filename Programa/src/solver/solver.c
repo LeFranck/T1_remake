@@ -18,6 +18,8 @@ int main(int argc, char const *argv[])
 	Master* m = create_master(layout);
 	ordenar_colores(m->t);
 	juntar_lineas_por_color(m);
+	set_lines_goals(m->t);
+	fprintf(stderr,"HITO4\n");
 	print_telar(m->t);
 
 	/* TODO IMPRIMIR DECISIONES */
