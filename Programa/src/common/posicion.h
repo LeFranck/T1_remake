@@ -23,6 +23,8 @@ int dist_x(Posicion* a, Posicion* b);
 
 int dist_y(Posicion* a, Posicion* b);
 
+char posiciones_distintas(Posicion* a, Posicion* b);
+
 void print_posicion(Posicion* p);
 
 void destroy_posicion(Posicion* p);

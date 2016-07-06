@@ -46,6 +46,18 @@ int dist_y(Posicion* a, Posicion* b)
 	return r;
 }
 
+char posiciones_distintas(Posicion* a, Posicion* b)
+{
+	if(a->z != b->z || a->b != b->b)
+	{
+		return 'T';
+	}else{
+		return 'F';
+	}
+}
+
+
+
 void print_posicion(Posicion* p)
 {
 	fprintf(stderr,"\tz: %d\n",p->z);

@@ -65,9 +65,10 @@ void conectar_linea(Master* m, Linea* l)
 	{
 		l->actual = create_nodo_backtracking(l->number);
 	}
-	while(l->isReady!='T' || l->dead!='T')
+	while(l->isReady!='T' && l->dead!='T')
 	{
 		mover_linea(m,l);
+		fprintf(stderr,"Movi linea :) \n ");
 	}
 	if(l->isReady=='T')
 	{
@@ -91,11 +92,40 @@ void mover_linea(Master* m,Linea* l)
 	}else{
 		avanzar_linea(m,l);
 	}
+	fprintf(stderr,"avanze linea :) \n ");
 }
 
 void calcular_opciones_linea(Master* m, Linea* l)
 {
-
+	Zone* z = m->l->zones[l->cabeza->z];
+	int i = 0;
+	int validas = 0;
+	int b_c = z->building_count;
+	l->actual->building_count = b_c;
+	for(i = 0; i< b_c; i++)
+	{
+		if(!city_client_is_taken(z->buildings[i]))
+		{
+			if(city_client_is_blank(z->buildings[i]))
+			{
+				l->actual->opciones[i] = 'T';
+				validas++;
+			}
+			if(z->buildings[i]->color == l->color)
+			{
+				l->actual->opciones[i] = 'T';
+				validas++;
+				l->actual->meta = 'T';
+			}
+		}
+	}
+	l->direccion = direccion_desde(l->cabeza, m->t->lineas[l->goal]->cabeza);
+	if(validas == 0)
+	{
+		l->deadEnd ='T';
+	}else{
+		l->actual->validas_count = validas;
+	}
 }
 
 void retroceder_linea(Master* m, Linea* l)
@@ -106,9 +136,49 @@ void retroceder_linea(Master* m, Linea* l)
 
 void avanzar_linea(Master* m, Linea* l)
 {
+	if(l->actual->meta == 'T')
+	{
+		conectar_meta(m,l);
+	}else{
+		conectar_a_blanco(m,l);
+	}
+}
 
+void conectar_meta(Master* m, Linea* l)
+{
+	//No tengo que pintar a nadie :)
+	conectar_linea_a_edificio(m, l, m->t->lineas[l->goal]->cabeza->b);
+	//actualizar datos en ambas lineas
+	double dir = direccion_desde(l->cabeza, m->t->lineas[l->goal]->cabeza);
+	double dir2 = dir * (-1.0);
+	fprintf(stderr,"Calcule direccion :)\n ");
+	actualizar_linea(l, m->t->lineas[l->goal]->cabeza, 'T', dir);
+	fprintf(stderr,"actualize linea 1 :) \n ");
+	actualizar_linea(m->t->lineas[l->goal],m->t->lineas[l->goal]->cabeza, 'T', dir2);
+	fprintf(stderr,"actualize linea 2 :) \n ");
 
 }
+
+void conectar_a_blanco(Master* m, Linea* l)
+{
+
+}
+
+//agregar conexion en funcion del index linea o al final???
+void conectar_linea_a_edificio(Master* m, Linea* l, int b)
+{
+	//client link
+	Zone* z = m->l->zones[l->cabeza->z];
+	Client* c1 = z->buildings[l->cabeza->b];
+	Client* c2 = z->buildings[b];
+	c1->linked[c1->link_count] = c2;
+	c1->link_count++;
+	c2->linked[c2->link_count] = c1;
+	c2->link_count++;
+	agregar_conexion_a_solucion(m->s,z->index,c1->index,c2->index);
+}
+
+
 
 void juntar_lineas_por_color(Master* m)
 {

@@ -38,6 +38,28 @@ void set_goal_linea(Linea* l, int l_comp_count, int index_en_telar)
 	}	
 }
 
+void actualizar_linea(Linea* l, Posicion* nueva, char isReady, double direccion)
+{
+	//Nodo Actual en linea
+	if(l->actual)
+	{
+		l->actual->opciones[nueva->b] = 'T';
+		l->actual->taken_count++;
+		NodoBacktracking* nuevo = create_nodo_backtracking(l->number);
+		push_nodo_backtracking(l->actual , nuevo);
+	}
+	//linea
+	if(posiciones_distintas(nueva, l->cabeza)=='T')
+	{
+		l->largo++;
+		l->fin_solucion++;
+	}
+	l->isReady = isReady;
+	l->direccion = direccion;
+	l->cabeza = nueva;
+}
+
+
 void print_linea(Linea* l)
 {
 	fprintf(stderr,"\n");

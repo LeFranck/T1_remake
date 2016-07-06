@@ -19,11 +19,12 @@ int main(int argc, char const *argv[])
 	ordenar_colores(m->t);
 	juntar_lineas_por_color(m);
 	set_lines_goals(m->t);
-	fprintf(stderr,"HITO4\n");
+	solve_puzzle(m, 'l');
 	print_telar(m->t);
 
 	/* TODO IMPRIMIR DECISIONES */
 
+	print_solucion_output(m->s);
 	/* Indicamos al watcher y al judge que ya terminamos */	
 	printf("END\n");
 

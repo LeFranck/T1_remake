@@ -162,7 +162,6 @@ void set_lines_goals(Telar* t)
 	int i = 0;
 	for(i = 0; i < t->colores_count; i++)
 	{
-		fprintf(stderr,"Set line goals line %d \n",i);
 		set_lines_goals_color(t, i);
 	}
 }
