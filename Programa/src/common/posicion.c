@@ -1,6 +1,7 @@
 #include "posicion.h"
 #include <stdio.h>
 #include <math.h>
+#define PI 3.14159265
 
 
 Posicion* create_posicion(int z, int b, int x, int y)
@@ -18,10 +19,11 @@ double direccion_desde(Posicion* a, Posicion* b)
 	double dist_x = b->x - a->x;
 	double dist_y = b->y - b->x;
 	double r = 0.0;
+	double grados = 180.0/ PI;
 	if(dist_y!=0.0)
 	{
 		//retorna en grados
-		r = atan(dist_x/dist_y)*57.23;
+		r = atan(dist_x/dist_y)*grados;
 	}
 	return r;
 }

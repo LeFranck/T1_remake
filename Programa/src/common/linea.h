@@ -55,4 +55,12 @@ void print_linea(Linea* l);
 
 void destroy_linea(Linea* l);
 
+int building8_get_building(double direccion);
+
+int building6_get_building(double direccion);
+
+int building4_get_building(double direccion);
+
+int building2_get_building(double direccion);
+
 #endif

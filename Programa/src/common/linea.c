@@ -61,9 +61,93 @@ void actualizar_linea(Linea* l, Posicion* nueva, char isReady, double direccion)
 
 int get_building_objetivo(Linea* l)
 {
-	return 0;
+	int r = 0;
+	switch(l->actual->building_count) 
+	{
+		case 8 :
+			r = building8_get_building(l->direccion);
+			break;
+		case 6 :
+			r = building6_get_building(l->direccion);
+			break;
+		case 4 :
+			r = building4_get_building(l->direccion);
+			break;
+		case 2 :
+			r = building2_get_building(l->direccion);
+			break;
+		default :
+		printf("WTF\n" );
+	}
+	return r;
 }
 
+int building8_get_building(double direccion)
+{
+	int r = 0;
+	if(direccion >= -202.5 && direccion <= -157.5)
+	{
+		r = 4;
+	}else if(direccion >= -157.5 && direccion <= -112.5)
+	{
+		r = 3;
+	}else if(direccion >= -112.5 && direccion <= -67.5)
+	{
+		r = 2;
+	}else if(direccion >= -67.5 && direccion <= -22.5)
+	{
+		r = 1;
+	}else if(direccion >= -22.5 && direccion <= 22.5)
+	{
+		r = 0;
+	}else if(direccion >= 22.5 && direccion <= 67.5)
+	{
+		r = 7;
+	}else if(direccion >= 67.5 && direccion <= 112.5)
+	{
+		r = 6;
+	}else if(direccion >= 112.5 && direccion <= 157.5)
+	{
+		r = 5;
+	}else if(direccion >= 157.5 && direccion <= 202.5)
+	{
+		r = 4;
+	}else{
+		printf("WTF\n" );
+	}
+	return r;
+}
+
+int building6_get_building(double direccion)
+{
+	return building8_get_building(direccion);
+}
+
+int building4_get_building(double direccion)
+{
+	int r = 0;
+	if(direccion >= -180.0 && direccion <= -90.0)
+	{
+		r = 1;
+	}else if(direccion >= -90.0 && direccion <= 0.0)
+	{
+		r = 0;
+	}else if(direccion >= 0.0 && direccion <= 90.0)
+	{
+		r = 4;
+	}else if(direccion >= 90 && direccion <= 180)
+	{
+		r = 2;
+	}else{
+		printf("WTF\n" );
+	}
+	return r;
+}
+
+int building2_get_building(double direccion)
+{
+	return building4_get_building(direccion);
+}
 
 void print_linea(Linea* l)
 {
