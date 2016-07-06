@@ -20,7 +20,7 @@ void agregar_conexion_a_solucion(Solucion* s, size_t i0, uint8_t i1, uint8_t i2)
 	s->c1_index[s->cabeza] = i1;
 	s->c2_index[s->cabeza] = i2;
 	s->cabeza++;
-	if(s->cabeza == s->conexiones_max)
+	if(s->cabeza == s->conexiones_max)	
 	{
 		s->ready= 'T';
 	}

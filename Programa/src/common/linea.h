@@ -49,6 +49,8 @@ void set_goal_linea(Linea* l, int l_comp_count, int index_en_telar);
 
 void actualizar_linea(Linea* l, Posicion* nueva, char isReady, double dir);
 
+int get_building_objetivo(Linea* l);
+
 void print_linea(Linea* l);
 
 void destroy_linea(Linea* l);

@@ -4,6 +4,7 @@
 #include "telar.h"
 #include "stats.h"
 #include "solucion.h"
+#include "linea.h"
 #include <stdio.h>
 
 struct master
@@ -43,6 +44,8 @@ void avanzar_linea(Master* m, Linea* l);
 void conectar_meta(Master* m, Linea* l);
 
 void conectar_a_blanco(Master* m, Linea* l);
+
+void make_white_move(Master* m, Linea* l, int seed);
 
 void conectar_linea_a_edificio(Master* m, Linea* l, int b);
 

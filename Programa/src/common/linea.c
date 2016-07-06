@@ -59,6 +59,11 @@ void actualizar_linea(Linea* l, Posicion* nueva, char isReady, double direccion)
 	l->cabeza = nueva;
 }
 
+int get_building_objetivo(Linea* l)
+{
+	return 0;
+}
+
 
 void print_linea(Linea* l)
 {

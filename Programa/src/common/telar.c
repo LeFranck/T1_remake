@@ -66,8 +66,8 @@ Telar* create_telar(Layout* l)
 	{
 		bc = bc + l->zones[i]->building_count;
 		for(j = 0; j < l->zones[i]->building_count; j++)
-		{
-			if(l->zones[i]->buildings[j]->color!=0 && city_client_is_taken(l->zones[i]->buildings[j]))
+		{	
+			if(l->zones[i]->buildings[j]->color!=0 && !city_client_is_taken(l->zones[i]->buildings[j]) && !l->zones[i]->buildings[j]->linked[0]->zone->core )
 			{
 				lineas_flotantes_count++;
 				cantidad_por_color[l->zones[i]->buildings[j]->color-1]++;
@@ -115,7 +115,7 @@ Telar* create_telar(Layout* l)
 		{
 			for(j = 0; j < l->zones[i]->building_count; j++)
 			{
-				if(l->zones[i]->buildings[j]->color!=0 && city_client_is_taken(l->zones[i]->buildings[j]))
+				if(l->zones[i]->buildings[j]->color!=0 && !city_client_is_taken(l->zones[i]->buildings[j]) && !l->zones[i]->buildings[j]->linked[0]->zone->core)
 				{
 					// z, b, x e y 
 					Posicion* p = create_posicion( i, j ,l->zones[i]->x,l->zones[i]->y);

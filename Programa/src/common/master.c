@@ -92,7 +92,6 @@ void mover_linea(Master* m,Linea* l)
 	}else{
 		avanzar_linea(m,l);
 	}
-	fprintf(stderr,"avanze linea :) \n ");
 }
 
 void calcular_opciones_linea(Master* m, Linea* l)
@@ -151,18 +150,25 @@ void conectar_meta(Master* m, Linea* l)
 	//actualizar datos en ambas lineas
 	double dir = direccion_desde(l->cabeza, m->t->lineas[l->goal]->cabeza);
 	double dir2 = dir * (-1.0);
-	fprintf(stderr,"Calcule direccion :)\n ");
 	actualizar_linea(l, m->t->lineas[l->goal]->cabeza, 'T', dir);
-	fprintf(stderr,"actualize linea 1 :) \n ");
 	actualizar_linea(m->t->lineas[l->goal],m->t->lineas[l->goal]->cabeza, 'T', dir2);
-	fprintf(stderr,"actualize linea 2 :) \n ");
 
 }
 
 void conectar_a_blanco(Master* m, Linea* l)
 {
-
+	make_white_move(m, l, 1);
+	//expandir_color(Master* m, Linea* l);
 }
+
+void make_white_move(Master* m , Linea* l, int seed)
+{
+
+	int building_obj = get_building_objetivo(l);
+}
+
+
+
 
 //agregar conexion en funcion del index linea o al final???
 void conectar_linea_a_edificio(Master* m, Linea* l, int b)
