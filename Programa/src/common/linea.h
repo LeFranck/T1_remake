@@ -51,9 +51,15 @@ void actualizar_linea(Linea* l, Posicion* nueva, char isReady, double dir);
 
 int get_building_objetivo(Linea* l);
 
-void print_linea(Linea* l);
+int movimiento_estiloso(Linea* l, int obj, int a, int b, int a_, int b_);
 
-void destroy_linea(Linea* l);
+int movimiento_estilo_a(Linea* l, int obj);
+
+int movimiento_estilo_b(Linea* l, int obj);
+
+int movimiento_estilo_c(Linea* l, int obj);
+
+int movimiento_estilo_d(Linea* l, int obj);
 
 int building8_get_building(double direccion);
 
@@ -62,5 +68,9 @@ int building6_get_building(double direccion);
 int building4_get_building(double direccion);
 
 int building2_get_building(double direccion);
+
+void print_linea(Linea* l);
+
+void destroy_linea(Linea* l);
 
 #endif

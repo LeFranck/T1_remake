@@ -82,6 +82,60 @@ int get_building_objetivo(Linea* l)
 	return r;
 }
 
+int movimiento_estiloso(Linea* l, int obj, int A, int B, int A_, int B_)
+{
+	int i = 0;
+	int a = A;
+	int b = B;
+	int a_ = A_;
+	int b_ = B_;
+	int count = l->actual->building_count;
+	for(i = 0; i < count; i++)
+	{
+		if(i==0)
+		{
+			if(l->actual->opciones[obj]=='V')
+			{
+				return obj;
+			}
+		}else if(i%2 == 0)
+		{
+			if(l->actual->opciones[(obj+a)%count]=='V')
+			{
+				return (obj+a)%count;
+			}
+			a = (a +a_)%count ;
+		}else{
+			if(l->actual->opciones[(obj+b)%count]=='V')
+			{
+				return (obj+b)%count;
+			}
+			b = (b + b_)%count;
+		}
+	}
+	return -1;
+}
+
+int movimiento_estilo_a(Linea* l, int obj)
+{
+	return movimiento_estiloso(l,obj,1,-1,1,-1);
+}
+
+int movimiento_estilo_b(Linea* l, int obj)
+{
+	return movimiento_estiloso(l,obj,-1,1,-1,1);
+}
+
+int movimiento_estilo_c(Linea* l, int obj)
+{
+	return movimiento_estiloso(l,obj,4,-4,-1,+1);
+}
+
+int movimiento_estilo_d(Linea* l, int obj)
+{
+	return movimiento_estiloso(l,obj,1,-1,2,-2);
+}
+
 int building8_get_building(double direccion)
 {
 	int r = 0;
