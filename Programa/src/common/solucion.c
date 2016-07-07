@@ -24,6 +24,9 @@ void agregar_conexion_a_solucion(Solucion* s, size_t i0, uint8_t i1, uint8_t i2)
 	{
 		s->ready= 'T';
 	}
+	//fprintf(stderr,"S->Cabeza: %d \t S->C_M: %d \n ",s->cabeza, s->conexiones_max);
+	fprintf(stderr,"LINK %zu %hhu %hhu\n", i0, i1, i2);
+	printf("LINK %zu %hhu %hhu\n", i0, i1, i2);
 }
 
 void print_solucion_output(Solucion* s)

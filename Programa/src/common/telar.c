@@ -17,6 +17,10 @@ Telar* init_telar(int l_c, int c_c, int c_m, char* colores, int* cantidad_por_co
 	r->c_m = c_m;
 	int i = 0;
 	int j = 0;
+	for(i = 0; i < l_c; i++)
+	{
+		r->estados_de_lineas[i] = 'W';
+	}
 	for(i = 0; i < 7; i++)
 	{
 		if(colores[i]=='T')
@@ -62,6 +66,8 @@ Telar* create_telar(Layout* l)
 		colores[i] = 'F';
 		cantidad_por_color[i] = 0;
 	}
+	//cuenta los edificios totales
+	//cuenta la cantidad de lineas flotantes que habran
 	for(i = 0; i < l->zone_count; i++)
 	{
 		bc = bc + l->zones[i]->building_count;
@@ -77,6 +83,8 @@ Telar* create_telar(Layout* l)
 
 	c_m = bc/2;
 
+	//Cuenta las lineas a partir de los cores
+	//Agrega a los contadores las cantidades de lineas por color
 	for(i = 0; i < l->core_count; i++)
 	{
 		l_c = l_c + l->cores[i]->buildings[0]->link_count;
@@ -94,7 +102,10 @@ Telar* create_telar(Layout* l)
 		if(colores[i]=='T'){c_c++;}
 	}
 	
+	//Setea las variables de telar a partir de los parametros
 	Telar* r = init_telar(l_c,c_c,c_m, colores, cantidad_por_color);
+
+	//Crea las lineas conectadas
 	for(i = 0; i < l->core_count; i++)
 	{
 		for(j = 0; j < l->cores[i]->buildings[0]->link_count; j++)
@@ -109,6 +120,7 @@ Telar* create_telar(Layout* l)
 		}
 	}
 	
+	//Crea las lineas flotantes
 	if(lineas_flotantes_count > 0)
 	{
 		for(i = 0; i < l->zone_count; i++)
@@ -156,7 +168,7 @@ void ordenar_colores(Telar* t)
 	}
 
 }
-
+//Setea las metas de todas las lineas al inicio del programa
 void set_lines_goals(Telar* t)
 {
 	int i = 0;
@@ -166,6 +178,7 @@ void set_lines_goals(Telar* t)
 	}
 }
 
+//Setea las metas de todas las lineas del color i
 void set_lines_goals_color(Telar* t, int i)
 {
 	set_lines_distancia_otras_lineas(t, i);
@@ -176,9 +189,9 @@ void set_lines_goals_color(Telar* t, int i)
 	}	
 }
 
+// i es el numero en el index colores(estamos seteando la distancia de ese color)
 void set_lines_distancia_otras_lineas(Telar* t, int i)
 {
-	// i es el numero en el index colores(estamos seteando la distancia de ese color)
 	int j = 0;
 	int k = 0;
 	for(j = 0; j < t->lineas_por_color[i]; j++)
@@ -197,6 +210,32 @@ void set_lines_distancia_otras_lineas(Telar* t, int i)
 	}
 }
 
+
+void reset_goal_linea(Telar* t, Linea* l)
+{
+	int i = 0;
+	int j = 0;
+	int min = 1000000;
+	int index = 0;
+	if(t->estados_de_lineas[l->goal] != 'W')
+	{
+		for(i = 0; i < t->colores_count; i++){
+			if(t->colores[i] == l->color)
+			{
+				for(j = 0; j < t->lineas_por_color[i]; j++)
+				{
+					double dist_j = l->distancia_otras_lineas[j];
+					if(dist_j < min && dist_j != -1.0 && t->estados_de_lineas[t->index_en_lineas_por_color[i]+j] == 'W')
+					{
+						index = t->index_en_lineas_por_color[i]+j;
+						min = dist_j;
+					}
+				}
+				l->goal = index;
+			}
+		}			
+	}
+}
 
 void print_telar(Telar* t)
 {

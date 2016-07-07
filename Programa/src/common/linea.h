@@ -43,13 +43,15 @@ struct linea
 
 typedef struct linea Linea;
 
+//------------------------------------		LISTOS	 	-----------------------------------------//
+
 Linea* create_linea(Color c, int number, char alimentada, Posicion* inicio);
 
 void set_goal_linea(Linea* l, int l_comp_count, int index_en_telar);
 
-void actualizar_linea(Linea* l, Posicion* nueva, char isReady, double dir);
+void actualizar_linea(Linea* l, Posicion* nueva, char isReady, double dir, int building_tomado);
 
-int get_building_objetivo(Linea* l);
+int get_building_objetivo(Linea* l, int dif_x);
 
 int movimiento_estiloso(Linea* l, int obj, int a, int b, int a_, int b_);
 
@@ -61,16 +63,25 @@ int movimiento_estilo_c(Linea* l, int obj);
 
 int movimiento_estilo_d(Linea* l, int obj);
 
-int building8_get_building(double direccion);
+//Test aprobado
+int building8_get_building(double direccion, int dif_x);
 
-int building6_get_building(double direccion);
+int building6_get_building(double direccion, int dif_x);
 
-int building4_get_building(double direccion);
+int building4_get_building(double direccion, int dif_x);
 
 int building2_get_building(double direccion);
 
 void print_linea(Linea* l);
 
 void destroy_linea(Linea* l);
+
+//------------------------------------		FALTA	 	-----------------------------------------//
+
+
+//------------------------------------		VACIOS	 	-----------------------------------------//
+
+
+
 
 #endif

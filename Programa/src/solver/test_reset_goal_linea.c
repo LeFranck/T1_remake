@@ -21,10 +21,11 @@ int main(int argc, char const *argv[])
 	set_lines_goals(m->t);
 	//solve_puzzle(m, 'l');
 	print_telar(m->t);
+	tejer(m);
 
 	/* TODO IMPRIMIR DECISIONES */
 
-	//print_solucion_output(m->s);
+	print_solucion_output(m->s);
 	/* Indicamos al watcher y al judge que ya terminamos */	
 	printf("END\n");
 
