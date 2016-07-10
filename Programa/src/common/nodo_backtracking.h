@@ -1,5 +1,7 @@
 #ifndef T1_LIB_NODO_BACKTRACKING_H
 #define T1_LIB_NODO_BACKTRACKING_H
+#include <stdint.h>
+#include <stdlib.h>
 
 
 typedef struct NodoBacktracking
@@ -17,6 +19,13 @@ typedef struct NodoBacktracking
 	int line_number;
 	int building_count;
 	int zone_sides;
+
+	//conexion hecha 
+	size_t z_index;
+	uint8_t c1_index;
+	uint8_t c2_index;
+
+
 	struct NodoBacktracking* prev;
 } NodoBacktracking;
 
@@ -28,6 +37,8 @@ NodoBacktracking* push_nodo_backtracking(NodoBacktracking* prev, NodoBacktrackin
 
 //me cabe la duda del retorno
 NodoBacktracking* pop_nodo_backtracking(NodoBacktracking* actual);
+
+void print_solucion_desde_nodo(NodoBacktracking* actual);
 
 void destroy_nodo_backtracking(NodoBacktracking* n);
 

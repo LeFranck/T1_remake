@@ -24,6 +24,8 @@ void agregar_conexion_a_solucion(Solucion* s, size_t i0, uint8_t i1, uint8_t i2)
 
 void print_solucion_output(Solucion* s);
 
+void print_solucion_output_parcial(Solucion* s);
+
 void destroy_solucion(Solucion* s);
 
 #endif

@@ -137,6 +137,15 @@ Telar* create_telar(Layout* l)
 			}
 		}
 	}
+
+	for(i = 0; i < r->lineas_count; i++)
+	{
+		r->lineas[i]->zonas_visitadas = malloc(sizeof(int)*l->zone_count);
+		for(j = 0; j < l->zone_count; j++)
+		{
+			r->lineas[i]->zonas_visitadas[j] = 0;
+		}
+	}
 	return r;
 }
 
@@ -303,4 +312,14 @@ void destroy_telar(Telar* t)
 	free(t->index_en_lineas_por_color);
 	free(t->estados_de_lineas);
 	free(t);
+}
+
+
+void print_solucion_final_desde_telar(Telar* t)
+{
+	int i = 0;
+	for(i = 0; i < t->lineas_count; i++)
+	{
+		print_solucion_desde_nodo(t->lineas[i]->actual);
+	}
 }

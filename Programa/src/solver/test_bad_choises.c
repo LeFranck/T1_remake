@@ -20,12 +20,12 @@ int main(int argc, char const *argv[])
 	juntar_lineas_por_color(m);
 	set_lines_goals(m->t);
 	//solve_puzzle(m, 'l');
-	print_telar(m->t);
+	//print_telar(m->t);
 	tejer(m);
 
 	/* TODO IMPRIMIR DECISIONES */
-
-	//print_solucion_output(m->s);
+	//print_solucion_output_parcial(m->s);
+	print_solucion_final_desde_telar(m->t);
 	/* Indicamos al watcher y al judge que ya terminamos */	
 	printf("END\n");
 

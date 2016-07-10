@@ -42,6 +42,7 @@ struct linea
 	Posicion* cabeza;
 
 	NodoBacktracking* actual;
+	int* zonas_visitadas;
 };
 
 typedef struct linea Linea;

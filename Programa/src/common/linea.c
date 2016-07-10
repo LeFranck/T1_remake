@@ -170,7 +170,7 @@ int building8_get_building(int direccion_x, int direccion_y)
 	}else if(direccion_x == 1 && direccion_y == 1){
 		r = 7;
 	}else{
-		printf("\n\n\nWTF\n\n\n");
+		fprintf(stderr,"\n\n\nWTF b8\n\n\n");
 	}
 	return r;
 }
@@ -213,7 +213,7 @@ int building4_get_building_8sides(int direccion_x, int direccion_y, int dif_x, i
 		}else if(direccion_x == 1 && direccion_y == 1){
 			r = 3;
 		}else{
-			printf("\n\n\nWTF\n\n\n");
+			fprintf(stderr,"\n\n\nWTF b4 rombo\n\n\n");
 		}
 	}else{
 		//Caso cuadrado
@@ -250,7 +250,7 @@ int building4_get_building_8sides(int direccion_x, int direccion_y, int dif_x, i
 				r = 3;
 			}
 		}else{
-			printf("\n\n\nWTF\n\n\n");
+			fprintf(stderr,"\n\n\nWTF b4 cuadrado\n\n\n");
 		}
 	}
 	return r;
@@ -292,7 +292,7 @@ int building4_get_building_4sides(int direccion_x, int direccion_y, int randomne
 	}else if(direccion_x == 1 && direccion_y == 1){
 		r = 3;
 	}else{
-		printf("\n\n\nWTF\n\n\n");
+		fprintf(stderr,"\n\n\nWTF b4 sides 4\n\n\n");
 	}
 	return r;
 }
