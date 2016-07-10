@@ -22,9 +22,10 @@ NodoBacktracking* create_nodo_backtracking(int line_number)
 	return r;
 }
 
-void push_nodo_backtracking(NodoBacktracking* actual, NodoBacktracking* nuevo)
+NodoBacktracking* push_nodo_backtracking(NodoBacktracking* actual, NodoBacktracking* nuevo)
 {
 	nuevo->prev = actual;
+	return nuevo;
 }
 
 //dudoso

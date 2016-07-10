@@ -19,13 +19,23 @@ int main(int argc, char const *argv[])
 	ordenar_colores(m->t);
 	juntar_lineas_por_color(m);
 	set_lines_goals(m->t);
-	solve_puzzle(m, 'l');
+	//solve_puzzle(m, 'l');
 	print_telar(m->t);
-	tejer(m);
+	Linea* l1 = m->t->lineas[16];
+	Linea* l2 = m->t->lineas[17];
+	conectar_linea(m,l1);
+	if(m->t->lineas[l2->goal]->isReady == 'T' || m->t->lineas[l2->goal]->dead == 'T')
+	{
+		reset_goal_linea(m->t,l2);
+	}
+	conectar_linea(m,l2);
+	print_telar(m->t);
+
+	//tejer(m);
 
 	/* TODO IMPRIMIR DECISIONES */
 
-	print_solucion_output(m->s);
+	//print_solucion_output(m->s);
 	/* Indicamos al watcher y al judge que ya terminamos */	
 	printf("END\n");
 

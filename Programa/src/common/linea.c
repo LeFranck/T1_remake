@@ -13,19 +13,20 @@ Linea* create_linea(Color c, int number, char alimentada, Posicion* inicio)
 	r->largo = 0;
 	r->inicio = inicio;
 	r->cabeza = inicio;
+	r->randomnes = 0;
 	return r;
 }
 
 //Escoge en el arreglo de distancias compatibles la menor y devuelve el index 
 //de esa linea en el telar general
-void set_goal_linea(Linea* l, int l_comp_count, int index_en_telar)
+void set_goal_linea(Linea* l, int lineas_compatibles_count, int index_en_telar)
 {
 	int k = 0;
 	int j = 0;
 	int min = 1000000;
 	int index = 0;
-	for(k = 0; k < l_comp_count; k++){
-		for(j = 0; j < l_comp_count; j++)
+	for(k = 0; k < lineas_compatibles_count; k++){
+		for(j = 0; j < lineas_compatibles_count; j++)
 		{
 			double dist_j = l->distancia_otras_lineas[j];
 			if(dist_j < min && dist_j != -1.0)
@@ -40,60 +41,25 @@ void set_goal_linea(Linea* l, int l_comp_count, int index_en_telar)
 	}	
 }
 
-void actualizar_linea(Linea* l, Posicion* nueva, char isReady, double direccion, int building_tomado)
+void actualizar_linea(Linea* l, Posicion* nueva, char isReady, int building_tomado)
 {
-	//Nodo Actual en linea
-	//PROBLEMAS
-	//if(l->actual)
-	//{
-		//l->actual->opciones[building_tomado] = 'T';
-		//l->actual->taken_count++;
-		//NodoBacktracking* nuevo = create_nodo_backtracking(l->number);
-		//push_nodo_backtracking(l->actual , nuevo);
-		//l->actual = nuevo;
-	//}
 	if(posiciones_distintas(nueva, l->cabeza)=='T')
 	{
-		//Cambio
-		l->actual->opciones[building_tomado] = 'T';
+		//Pase por ese bulding
+		l->actual->opciones[building_tomado] = 'P';
 		l->actual->taken_count++;
 		NodoBacktracking* nuevo = create_nodo_backtracking(l->number);
-		push_nodo_backtracking(l->actual , nuevo);
+		l->actual = push_nodo_backtracking(l->actual , nuevo);
 		l->largo++;
 		l->fin_solucion++;
 	}
 	l->isReady = isReady;
-	l->direccion = direccion;
 	l->cabeza = nueva;
+	fprintf(stderr, "Linea %d ha sido actualizada.\n",l->number );
+	fprintf(stderr, "Linea %d estado %c \n",l->number,l->isReady );
 }
 
-int get_building_objetivo(Linea* l, int dif_x)
-{
-	int r = 0;
-	switch(l->actual->building_count) 
-	{
-		case 8 :
-			r = building8_get_building(l->direccion, dif_x);
-			break;
-		case 6 :
-			r = building6_get_building(l->direccion, dif_x);
-			break;
-		case 4 :
-			r = building4_get_building(l->direccion, dif_x);
-			break;
-		case 2 :
-			if(l->cabeza->b == 0){
-				r = 1;
-			}else{
-				r = 0;
-			}
-			break;
-		default :
-		printf("WTF\n" );
-	}
-	return r;
-}
-
+//Movimiento a partir del building obj
 int movimiento_estiloso(Linea* l, int OBJ, int A, int B, int A_, int B_)
 {
 	int i = 0;
@@ -107,24 +73,25 @@ int movimiento_estiloso(Linea* l, int OBJ, int A, int B, int A_, int B_)
 	{
 		if(i==0)
 		{
-			if(l->actual->opciones[obj%count]=='V')
+			if(l->actual->opciones[obj%count]=='T')
 			{
 				return obj%count;
 			}
 		}else if(i%2 == 0)
 		{
-			if(l->actual->opciones[(obj+a)%count]=='V')
+			if(l->actual->opciones[(obj+a)%count]=='T')
 			{
 				return (obj+a)%count;
 			}
-			a = (a +a_)%count ;
+			a = a +a_;
+			//a = (a +a_)%count ;
 		}else{
-			fprintf(stderr,"(%d+%d)mod%d = %d\n",obj,b,count,(obj+b)%count);
-			if(l->actual->opciones[(obj+b)%count]=='V')
+			if(l->actual->opciones[(obj+b)%count]=='T')
 			{
 				return (obj+b)%count;
 			}
-			b = (b + b_)%count;
+			b = b + b_;
+			//b = (b + b_)%count;
 		}
 	}
 	return -1;
@@ -150,82 +117,184 @@ int movimiento_estilo_d(Linea* l, int obj)
 	return movimiento_estiloso(l,obj,1,-1,2,-2);
 }
 
-//BUG DEL ANGULO si x1 > x2 da el angulo de la derecha
-int building8_get_building(double direccion, int dif_x)
+//Encargados de obtener el building objetivo de una linea
+//Junto con la dirección de esta(La direccion se usara aca y nada mas)
+int get_building_objetivo(Linea* l, Linea* meta, int vecino0_x, int vecino0_y)
 {
-	int r = 0;
-	if(direccion >= -112.5 && direccion <= -67.5)
+	int r = -1;
+	Posicion* a = l->cabeza;
+	Posicion* b = meta->cabeza;
+	int dir_x = direccion_x(a,b);
+	int dir_y = direccion_y(a,b);
+	int zone_sides = l->actual->zone_sides;
+	int b_c = l->actual->building_count;
+	//bulding count puede ser 8, 4 o 2
+	if(b_c == 8)
 	{
-		r = 2;
-	}else if(direccion >= -67.5 && direccion <= -22.5)
-	{
-		if(dif_x < 0)
-		{
-			r = 5;
+		r = building8_get_building(dir_x, dir_y);
+	}else if(b_c == 4){
+		if(zone_sides == 8){
+			int dif_x = a->x - vecino0_x;
+			int dif_y = a->y - vecino0_y;
+			r = building4_get_building_8sides(dir_x, dir_y, dif_x, dif_y, l->randomnes);
 		}else{
-			r = 1;			
+			r = building4_get_building_4sides(dir_x, dir_y, l->randomnes);
 		}
-	}else if(direccion >= -22.5 && direccion <= 22.5)
-	{
-		if(dif_x < 0)
-		{
-			r = 4;
+	}else{
+		if(l->cabeza->b == 0){
+			r = 1;
 		}else{
 			r = 0;
 		}
-	}else if(direccion >= 22.5 && direccion <= 67.5)
-	{
-		if(dif_x < 0)
-		{
+	}
+	return r;
+}
+
+int building8_get_building(int direccion_x, int direccion_y)
+{
+	int r = -1;
+	if(direccion_x == 1 && direccion_y == 0){
+		r = 0;
+	}else if(direccion_x == 1 && direccion_y == -1){
+		r = 1;
+	}else if(direccion_x == 0 && direccion_y == -1){
+		r = 2;
+	}else if(direccion_x == -1 && direccion_y == -1){
+		r = 3;
+	}else if(direccion_x == -1 && direccion_y == 0){
+		r = 4;
+	}else if(direccion_x == -1 && direccion_y == 1){
+		r = 5;
+	}else if(direccion_x == 0 && direccion_y == 1){
+		r = 6;
+	}else if(direccion_x == 1 && direccion_y == 1){
+		r = 7;
+	}else{
+		printf("\n\n\nWTF\n\n\n");
+	}
+	return r;
+}
+
+int building4_get_building_8sides(int direccion_x, int direccion_y, int dif_x, int dif_y, int randomnes)
+{
+	int r = -1;
+	if(dif_x != 0 && dif_y != 0){
+		//Caso rombo
+		if(direccion_x == 1 && direccion_y == 0){
+			if(randomnes == 0){
+				r = 0;
+			}else{
+				r = 3;
+			}
+		}else if(direccion_x == 1 && direccion_y == -1){
+			r = 0;
+		}else if(direccion_x == 0 && direccion_y == -1){
+			if(randomnes == 0){
+				r = 0;
+			}else{
+				r = 1;
+			}
+		}else if(direccion_x == -1 && direccion_y == -1){
+			r = 1;
+		}else if(direccion_x == -1 && direccion_y == 0){
+			if(randomnes == 0){
+				r = 1;
+			}else{
+				r = 2;
+			}
+		}else if(direccion_x == -1 && direccion_y == 1){
+			r = 2;
+		}else if(direccion_x == 0 && direccion_y == 1){
+			if(randomnes == 0){
+				r = 2;
+			}else{
+				r = 3;
+			}
+		}else if(direccion_x == 1 && direccion_y == 1){
 			r = 3;
 		}else{
-			r = 7;
+			printf("\n\n\nWTF\n\n\n");
 		}
-	}else if(direccion >= 67.5 && direccion <= 112.5)
-	{
-		r = 6;
 	}else{
-		printf("WTF\n" );
+		//Caso cuadrado
+		if(direccion_x == 1 && direccion_y == 0){
+			r = 0;
+		}else if(direccion_x == 1 && direccion_y == -1){
+			if(randomnes == 0){
+				r = 0;
+			}else{
+				r = 1;
+			}
+		}else if(direccion_x == 0 && direccion_y == -1){
+			r = 1;
+		}else if(direccion_x == -1 && direccion_y == -1){
+			if(randomnes == 0){
+				r = 1;
+			}else{
+				r = 2;
+			}
+		}else if(direccion_x == -1 && direccion_y == 0){
+			r = 2;
+		}else if(direccion_x == -1 && direccion_y == 1){
+			if(randomnes == 0){
+				r = 2;
+			}else{
+				r = 3;
+			}
+		}else if(direccion_x == 0 && direccion_y == 1){
+			r = 3;
+		}else if(direccion_x == 1 && direccion_y == 1){
+			if(randomnes == 0){
+				r = 0;
+			}else{
+				r = 3;
+			}
+		}else{
+			printf("\n\n\nWTF\n\n\n");
+		}
 	}
-
-	fprintf(stderr,"direccion %f edificio %d\n",direccion,r);
 	return r;
 }
 
-//AL parecer los de 6 son un mito
-int building6_get_building(double direccion, int dif_x)
+int building4_get_building_4sides(int direccion_x, int direccion_y, int randomnes)
 {
-	return building8_get_building(direccion, dif_x);
-}
-
-int building4_get_building(double direccion, int dif_x)
-{
-	int r = 0;
-	if(direccion >= -90.0 && direccion <= 0.0)
-	{
-		if(dif_x<0)
-		{
-			r = 2;
+	int r = -1;
+	if(direccion_x == 1 && direccion_y == 0){
+		if(randomnes == 0){
+			r = 0;
 		}else{
-			r = 0;			
+			r = 3;
 		}
-	}else if(direccion >= 0.0 && direccion <= 90.0)
-	{
-		if(dif_x <0)
-		{
+	}else if(direccion_x == 1 && direccion_y == -1){
+		r = 0;
+	}else if(direccion_x == 0 && direccion_y == -1){
+		if(randomnes == 0){
+			r = 0;
+		}else{
+			r = 1;
+		}
+	}else if(direccion_x == -1 && direccion_y == -1){
+		r = 1;
+	}else if(direccion_x == -1 && direccion_y == 0){
+		if(randomnes == 0){
 			r = 1;
 		}else{
-			r = 3;			
+			r = 2;
 		}
+	}else if(direccion_x == -1 && direccion_y == 1){
+		r = 2;
+	}else if(direccion_x == 0 && direccion_y == 1){
+		if(randomnes == 0){
+			r = 2;
+		}else{
+			r = 3;
+		}
+	}else if(direccion_x == 1 && direccion_y == 1){
+		r = 3;
 	}else{
-		printf("WTF\n" );
+		printf("\n\n\nWTF\n\n\n");
 	}
 	return r;
-}
-
-int building2_get_building(double direccion)
-{
-		return building4_get_building(direccion,0);
 }
 
 void print_linea(Linea* l)

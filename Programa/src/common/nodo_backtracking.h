@@ -6,7 +6,7 @@ typedef struct NodoBacktracking
 {
 	char* opciones;
 	//Opciones:
-	//V es valida, F no es valida, T es tomada, taken
+	//T es valida, F no es valida, P es pase por ahi
 	int validas_count;
 	int taken_count;
 	//meta nos indica si estamos en la zona de la meta
@@ -16,6 +16,7 @@ typedef struct NodoBacktracking
 	int distancia;
 	int line_number;
 	int building_count;
+	int zone_sides;
 	struct NodoBacktracking* prev;
 } NodoBacktracking;
 
@@ -23,7 +24,7 @@ NodoBacktracking* init_nodo_backtracking();
 
 NodoBacktracking* create_nodo_backtracking(int line_number);
 
-void push_nodo_backtracking(NodoBacktracking* prev, NodoBacktracking* nuevo);
+NodoBacktracking* push_nodo_backtracking(NodoBacktracking* prev, NodoBacktracking* nuevo);
 
 //me cabe la duda del retorno
 NodoBacktracking* pop_nodo_backtracking(NodoBacktracking* actual);

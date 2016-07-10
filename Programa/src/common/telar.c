@@ -199,13 +199,41 @@ void set_lines_distancia_otras_lineas(Telar* t, int i)
 		t->lineas[t->index_en_lineas_por_color[i]+j]->distancia_otras_lineas = malloc(sizeof(double)*t->lineas_por_color[i]);
 		for(k = 0; k < t->lineas_por_color[i]; k++)
 		{
-			if(k==j)
+			//El segundo argumento del || es para ver si la linea esta ok
+			if(k==j || t->estados_de_lineas[t->index_en_lineas_por_color[i]+k] != 'W')
 			{
 				t->lineas[t->index_en_lineas_por_color[i]+j]->distancia_otras_lineas[k] = -1.0;
 			}else{
 				double dist = distancia_entre(t->lineas[t->index_en_lineas_por_color[i]+j]->cabeza, t->lineas[t->index_en_lineas_por_color[i]+k]->cabeza);
 				t->lineas[t->index_en_lineas_por_color[i]+j]->distancia_otras_lineas[k] = dist;
 			}
+		}
+	}
+}
+
+void set_dintacias_otras_lineas_desde_linea(Telar* t, int color, int linea)
+{
+	int index_en_arreglo_de_colores = 0;
+	int j = 0;
+	int i = 0;
+	for(j = 0; j < t->colores_count; j++)
+	{
+		if(t->colores[j] == color)
+		{
+			index_en_arreglo_de_colores = j;
+		}
+	}
+
+	int index_agregado = t->index_en_lineas_por_color[index_en_arreglo_de_colores];
+
+	for(i = 0; i < t->lineas_por_color[index_en_arreglo_de_colores]; i++)
+	{
+		if(index_agregado + i == linea || t->estados_de_lineas[index_agregado + i] != 'W')
+		{
+			t->lineas[linea]->distancia_otras_lineas[i] = -1;
+		}else{
+			double dist = distancia_entre(t->lineas[index_agregado + i]->cabeza, t->lineas[linea]->cabeza);
+			t->lineas[linea]->distancia_otras_lineas[i] = dist;
 		}
 	}
 }
@@ -217,24 +245,21 @@ void reset_goal_linea(Telar* t, Linea* l)
 	int j = 0;
 	int min = 1000000;
 	int index = 0;
-	if(t->estados_de_lineas[l->goal] != 'W')
-	{
-		for(i = 0; i < t->colores_count; i++){
-			if(t->colores[i] == l->color)
+	for(i = 0; i < t->colores_count; i++){
+		if(t->colores[i] == l->color)
+		{
+			for(j = 0; j < t->lineas_por_color[i]; j++)
 			{
-				for(j = 0; j < t->lineas_por_color[i]; j++)
+				double dist_j = l->distancia_otras_lineas[j];
+				if(dist_j < min && dist_j != -1.0 && t->estados_de_lineas[t->index_en_lineas_por_color[i]+j] == 'W')
 				{
-					double dist_j = l->distancia_otras_lineas[j];
-					if(dist_j < min && dist_j != -1.0 && t->estados_de_lineas[t->index_en_lineas_por_color[i]+j] == 'W')
-					{
-						index = t->index_en_lineas_por_color[i]+j;
-						min = dist_j;
-					}
+					index = t->index_en_lineas_por_color[i]+j;
+					min = dist_j;
 				}
-				l->goal = index;
 			}
-		}			
-	}
+			l->goal = index;
+		}
+	}			
 }
 
 void print_telar(Telar* t)

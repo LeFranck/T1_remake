@@ -5,7 +5,7 @@
 #include "../common/city.h"
 
 /* Ancho y alto en píxeles de las celdas octagonales */
-#define CELL_SIZE 80.0
+#define CELL_SIZE 40.0
 
 /** Indica que se debe mostrar la estructura interior del problema */
 bool draw_inner;

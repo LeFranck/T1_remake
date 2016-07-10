@@ -32,8 +32,6 @@ void destroy_master(Master* m);
 
 //------------------------------------		FALTA	 	-----------------------------------------//
 
-
-
 void solve_puzzle(Master* m, char condicion);
 
 void Solve(Master* m);

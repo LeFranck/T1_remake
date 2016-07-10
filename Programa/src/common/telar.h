@@ -27,6 +27,8 @@ Telar* clon_telar(Telar* t);
 
 Telar* create_telar(Layout* l);
 
+void set_dintacias_otras_lineas_desde_linea(Telar* t, int color, int linea);
+
 //Ordenar la lista de colores que tiene telar segun cantidad de lineas de cada color
 void ordenar_colores(Telar* t);
 

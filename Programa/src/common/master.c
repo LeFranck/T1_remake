@@ -49,10 +49,6 @@ void destroy_master(Master* m)
 	free(m);
 }
 //------------------------------------		LISTOS		 -----------------------------------------//
-
-
-
-
 //------------------------------------		Falta Completar -----------------------------------------//
 void solve_puzzle(Master* m, char condicion)
 {
@@ -66,8 +62,6 @@ void solve_puzzle(Master* m, char condicion)
 		Solve(m);
 	}
 }
-
-
 
 void Solve(Master* m)
 {
@@ -87,7 +81,25 @@ void tejer(Master* m)
 	int i = 0;
 	for(i = 0; i < m->t->lineas_count; i++)
 	{
+		//Si la meta de la linea esta ok
+		if(m->t->lineas[m->t->lineas[i]->goal]->isReady == 'T' || m->t->lineas[m->t->lineas[i]->goal]->dead == 'T')
+		{
+			fprintf(stderr,"La meta de la linea %d esta ok ",i);
+			//Si la linea no esta ok
+			if(m->t->lineas[i]->isReady != 'T' && m->t->lineas[i]->dead != 'T')
+			{
+				//Cambio la meta de la linea
+				fprintf(stderr,"Linea %d, meta: %d tomada\nPosicion meta ",i, m->t->lineas[i]->goal );
+				print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
+				fprintf(stderr,"RESET GOAL xq linea is%c\n",m->t->lineas[i]->isReady);
+				reset_goal_linea(m->t,m->t->lineas[i]);
+				fprintf(stderr,"Nueva posicion meta\n" );
+				print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
+			}
+		}
+		fprintf(stderr,"\nLinea %d, meta: %d\n",i, m->t->lineas[i]->goal);
 		conectar_linea(m, m->t->lineas[i]);
+		fprintf(stderr,"\n\n");
 	}
 }
 
@@ -98,19 +110,25 @@ void conectar_linea(Master* m, Linea* l)
 	{
 		l->actual = create_nodo_backtracking(l->number);
 	}
-	while(l->isReady!='T' && l->dead!='T')
-	{
-		mover_linea(m,l);
-	}
-	if(l->isReady=='T')
-	{
-		//R de ready
-		m->t->estados_de_lineas[l->number] = 'R';
-		m->t->estados_de_lineas[l->goal] = 'R';
-	}else{
-		//D de dead
-		m->t->estados_de_lineas[l->number] = 'D';
-		m->t->estados_de_lineas[l->number] = 'D';
+	if(l->isReady!='T' && l->dead!='T'){
+		while(l->isReady!='T' && l->dead!='T')
+		{
+			//fprintf(stderr, "Movere la linea %d que esta en estado %c\n",l->number, l->isReady );
+			mover_linea(m,l);
+			if(l->isReady!='T' && l->dead!='T'){
+				set_dintacias_otras_lineas_desde_linea(m->t, l->color, l->number);
+				reset_goal_linea(m->t, l);
+			}
+		}
+		if(l->isReady=='T')
+		{
+			//R de ready
+			m->t->estados_de_lineas[l->number] = 'R';
+			m->t->estados_de_lineas[l->goal] = 'R';
+		}else{
+			//D de dead
+			m->t->estados_de_lineas[l->number] = 'D';
+		}
 	}
 	//Podriamos eliminar el nodo backtracking de cada linea
 }
@@ -118,10 +136,10 @@ void conectar_linea(Master* m, Linea* l)
 void mover_linea(Master* m,Linea* l)
 {
 	calcular_opciones_linea(m,l);
-	reset_goal_linea(m->t,l);
 	if(l->deadEnd == 'T')
 	{
-		//fprintf(stderr,"Linea %d llego a un deadEnd\n",l->number);
+		fprintf(stderr,"Linea %d llego a un deadEnd\n",l->number);
+		l->dead = 'T';
 		retroceder_linea(m,l);
 	}else{
 		avanzar_linea(m,l);
@@ -135,20 +153,21 @@ void calcular_opciones_linea(Master* m, Linea* l)
 	int validas = 0;
 	int b_c = z->building_count;
 	l->actual->building_count = b_c;
+	l->actual->zone_sides = z->sides;
 	for(i = 0; i< b_c; i++)
 	{
 		if(!city_client_is_taken(z->buildings[i]))
 		{
 			if(city_client_is_blank(z->buildings[i]))
 			{
-				l->actual->opciones[i] = 'V';
+				l->actual->opciones[i] = 'T';
 				validas++;
 			}
 			//Tengo a la meta en mi zona
 			if(z->buildings[i]->color == l->color && l->cabeza->b != i)
 			{
-				fprintf(stderr,"opcion %d Mismo color y distintos edificios\n",i);
-				l->actual->opciones[i] = 'V';
+				fprintf(stderr,"opcion %d Mismo color y distinto edifico que %d\n",i,l->cabeza->b);
+				l->actual->opciones[i] = 'T';
 				validas++;
 				l->actual->meta = 'T';
 			}
@@ -156,7 +175,6 @@ void calcular_opciones_linea(Master* m, Linea* l)
 			l->actual->opciones[i] = 'F';
 		}
 	}
-	l->direccion = direccion_desde(l->cabeza, m->t->lineas[l->goal]->cabeza);
 	if(validas == 0)
 	{
 		l->deadEnd ='T';
@@ -171,7 +189,6 @@ void calcular_opciones_linea(Master* m, Linea* l)
 		//fprintf(stderr,"- [%d,%c]",i,l->actual->opciones[i]);
 	//}
 	//fprintf(stderr,"\n\n");
-
 }
 
 void avanzar_linea(Master* m, Linea* l)
@@ -184,18 +201,23 @@ void avanzar_linea(Master* m, Linea* l)
 		conectar_a_blanco(m,l);
 		fprintf(stderr,"Conecte a blanco\n");
 	}
+	if(l->randomnes == 0){
+		l->randomnes = 91;
+	}else{
+		l->randomnes = 0;
+	}
 }
 
 void conectar_meta(Master* m, Linea* l)
 {
 	//No tengo que pintar a nadie :)
-	//fprintf(stderr,"Conectareeeee linea %d a la meta %d\n",l->number,m->t->lineas[l->goal]->cabeza->b);
+	fprintf(stderr,"Conectareeeee linea %d a la meta %d\n",l->number,m->t->lineas[l->goal]->cabeza->b);
 	conectar_linea_a_edificio(m, l, m->t->lineas[l->goal]->cabeza->b);
 	//actualizar datos en ambas lineas
 	//double dir = direccion_desde(l->cabeza, m->t->lineas[l->goal]->cabeza);
 	//double dir2 = dir * (-1.0);
-	actualizar_linea(l, m->t->lineas[l->goal]->cabeza,'T', -2.0 ,m->t->lineas[l->goal]->cabeza->b);
-	actualizar_linea(m->t->lineas[l->goal],m->t->lineas[l->goal]->cabeza, 'T', -2.0 ,m->t->lineas[l->goal]->cabeza->b);
+	actualizar_linea(l, m->t->lineas[l->goal]->cabeza,'T',m->t->lineas[l->goal]->cabeza->b);
+	actualizar_linea(m->t->lineas[l->goal],m->t->lineas[l->goal]->cabeza, 'T' ,m->t->lineas[l->goal]->cabeza->b);
 }
 
 void conectar_a_blanco(Master* m, Linea* l)
@@ -216,15 +238,22 @@ void conectar_a_blanco(Master* m, Linea* l)
 	int x_ = c_lejano->zone->x;
 	int y_ = c_lejano->zone->y;
 	Posicion* nueva = create_posicion(z_,b_,x_,y_);
-	double dir = direccion_desde(nueva, m->t->lineas[l->goal]->cabeza);
-	actualizar_linea(l, nueva, 'F', dir, b);
+	//double dir = direccion_desde(nueva, m->t->lineas[l->goal]->cabeza);
+	actualizar_linea(l, nueva,'F',b);
 }
 
 int chose_white_move(Master* m , Linea* l, int seed)
 {
 	//La diferencia de X es pasada para evitar los bugs del arctan
-	int diff_x = dist_x(l->cabeza, m->t->lineas[l->goal]->cabeza);
-	int building_obj = get_building_objetivo(l, diff_x);
+	//int diff_x = dist_x(l->cabeza, m->t->lineas[l->goal]->cabeza);
+	//int building_obj = get_building_objetivo(l, diff_x);
+
+	//Este int servira para direfenciar runbow de landprotector
+	Client* vecino0 =  m->l->zones[l->cabeza->z]->buildings[0]->linked[0];
+	int vecino0_x = vecino0->zone->x;
+	int vecino0_y = vecino0->zone->y;
+	int building_obj = get_building_objetivo(l, m->t->lineas[l->goal], vecino0_x, vecino0_y);
+
 	if(seed == 1)
 	{
 		return movimiento_estilo_a(l,building_obj);

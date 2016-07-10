@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
 
 	/* TODO IMPRIMIR DECISIONES */
 
-	print_solucion_output(m->s);
+	//print_solucion_output(m->s);
 	/* Indicamos al watcher y al judge que ya terminamos */	
 	printf("END\n");
 
