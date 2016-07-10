@@ -33,6 +33,7 @@ struct linea
 	double* distancia_otras_lineas;
 	int* lineas_compatibles;
 	int* posibles_metas;
+	int lineas_compatibles_count;
 
 	//Data asociada con la linea
 	int inicio_solucion;

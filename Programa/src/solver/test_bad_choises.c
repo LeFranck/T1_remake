@@ -20,9 +20,54 @@ int main(int argc, char const *argv[])
 	juntar_lineas_por_color(m);
 	set_lines_goals(m->t);
 	//solve_puzzle(m, 'l');
-	//print_telar(m->t);
-	tejer(m);
+	print_telar(m->t);
+	
+	//tejer(m);
+	conectar_linea(m,m->t->lineas[0]);
+	conectar_linea(m,m->t->lineas[1]);
+	conectar_linea(m,m->t->lineas[2]);
+	conectar_linea(m,m->t->lineas[3]);
+	int i = 0;
+	//for(i = 0; i < m->t->lineas_count; i++)
+	//{
+	//	limpiar_linea(m,m->t->lineas[i]);
+		//fprintf(stderr, "linea %d meta %d\n",i,m->t->lineas[i]->goal );
+	//}
 
+	
+	//print_telar(m->t);
+	
+
+
+	//limpiar_linea(m,m->t->lineas[5]);
+	print_linea(m->t->lineas[0]);
+	print_linea(m->t->lineas[1]);
+	//print_telar(m->t);
+	print_linea(m->t->lineas[2]);
+	print_linea(m->t->lineas[3]);
+
+	limpiar_linea(m,m->t->lineas[3]);
+	limpiar_linea(m,m->t->lineas[2]);
+
+	print_linea(m->t->lineas[3]);
+	print_linea(m->t->lineas[2]);
+	
+	reset_goal_linea(m->t, m->t->lineas[2]);
+	print_linea(m->t->lineas[3]);
+	conectar_linea(m,m->t->lineas[2]);
+
+	//conectar_linea(m,m->t->lineas[3]);
+
+	print_linea(m->t->lineas[3]);
+	//print_linea(m->t->lineas[3]);
+	//calcular_opciones_linea(m,m->t->lineas[0]);
+	//reset_goal_linea(m->t,m->t->lineas[0]);
+	//print_linea(m->t->lineas[0]);
+	//conectar_linea(m,m->t->lineas[0]);
+	//set_lines_goals(m->t);
+	//tejer(m);
+
+	//conectar_linea(m,m->t->lineas[2]);
 	/* TODO IMPRIMIR DECISIONES */
 	//print_solucion_output_parcial(m->s);
 	print_solucion_final_desde_telar(m->t);

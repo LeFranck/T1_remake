@@ -9,10 +9,24 @@ Linea* create_linea(Color c, int number, char alimentada, Posicion* inicio)
 	r->isReady = 'F';
 	r->alimentada = alimentada;
 	r->deadEnd = 'F';
+	r->dead = 'F';
 	r->number = number;
 	r->largo = 0;
-	r->inicio = inicio;
-	r->cabeza = inicio;
+	r->inicio = malloc(sizeof(Posicion));
+	r->cabeza = malloc(sizeof(Posicion));
+	int z1 = inicio->z;
+	int b1 = inicio->b;
+	int x1 = inicio->x;
+	int y1 = inicio->y;
+	r->inicio->z =  z1;
+	r->inicio->b =  b1;
+	r->inicio->x =  x1;
+	r->inicio->y =  y1;
+	r->cabeza->z =  z1;
+	r->cabeza->b =  b1;
+	r->cabeza->x =  x1;
+	r->cabeza->y =  y1;
+
 	r->randomnes = 0;
 	return r;
 }
@@ -25,6 +39,7 @@ void set_goal_linea(Linea* l, int lineas_compatibles_count, int index_en_telar)
 	int j = 0;
 	int min = 1000000;
 	int index = 0;
+	l->lineas_compatibles_count = lineas_compatibles_count;
 	for(k = 0; k < lineas_compatibles_count; k++){
 		for(j = 0; j < lineas_compatibles_count; j++)
 		{
@@ -52,11 +67,13 @@ void actualizar_linea(Linea* l, Posicion* nueva, char isReady, int building_toma
 		l->actual = push_nodo_backtracking(l->actual , nuevo);
 		l->largo++;
 		l->fin_solucion++;
+
+		//eSTABA fuera del if
+		l->cabeza = nueva;
 	}
 	l->isReady = isReady;
-	l->cabeza = nueva;
-	fprintf(stderr, "Linea %d ha sido actualizada.\n",l->number );
-	fprintf(stderr, "Linea %d estado %c \n",l->number,l->isReady );
+	//fprintf(stderr, "Linea %d ha sido actualizada.\n",l->number );
+	//fprintf(stderr, "Linea %d estado %c \n",l->number,l->isReady );
 }
 
 //Movimiento a partir del building obj
@@ -69,8 +86,7 @@ int movimiento_estiloso(Linea* l, int OBJ, int A, int B, int A_, int B_)
 	int b_ = B_;
 	int count = l->actual->building_count;
 	int obj = OBJ + count;
-	for(i = 0; i < count; i++)
-	{
+	while(1 == 1){
 		if(i==0)
 		{
 			if(l->actual->opciones[obj%count]=='T')
@@ -93,7 +109,34 @@ int movimiento_estiloso(Linea* l, int OBJ, int A, int B, int A_, int B_)
 			b = b + b_;
 			//b = (b + b_)%count;
 		}
+		i++;
 	}
+
+	//for(i = 0; i < count; i++)
+	//{
+		//if(i==0)
+		//{
+			//if(l->actual->opciones[obj%count]=='T')
+			//{
+				//return obj%count;
+			//}
+		//}else if(i%2 == 0)
+		//{
+			//if(l->actual->opciones[(obj+a)%count]=='T')
+			//{
+				//return (obj+a)%count;
+			//}
+			//a = a +a_;
+			////a = (a +a_)%count ;
+		//}else{
+			//if(l->actual->opciones[(obj+b)%count]=='T')
+			//{
+				//return (obj+b)%count;
+			//}
+			//b = b + b_;
+			////b = (b + b_)%count;
+		//}
+	//}
 	return -1;
 }
 
@@ -301,12 +344,24 @@ void print_linea(Linea* l)
 {
 	fprintf(stderr,"\n");
 	fprintf(stderr,"linea number: %d\n",l->number);
+	fprintf(stderr,"Inicio\n");
 	print_posicion(l->inicio);
+	fprintf(stderr,"Cabeza\n");
+	print_posicion(l->cabeza);
+	fprintf(stderr,"\tIs Ready: %c\n",l->isReady);
+	fprintf(stderr,"\tIs Dead: %c\n",l->dead);
+	fprintf(stderr,"\tIs DeadEnd: %c\n",l->deadEnd);
 	fprintf(stderr,"\tgoal: %d\n",l->goal);
 	fprintf(stderr,"\tcolor: %d",l->color);
 	fprintf(stderr,"\talimentada: %c",l->alimentada);
 	fprintf(stderr,"\n");
-
+	int i = 0;
+	for(i = 0; i < l->lineas_compatibles_count; i++)
+	{
+		fprintf(stderr, ", %f", l->distancia_otras_lineas[i]);
+	}
+	fprintf(stderr, "]\n" );
+	debug_print_solucion_desde_nodo(l->actual,0);
 }
 
 void destrot_linea(Linea* l)

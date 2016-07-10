@@ -62,9 +62,9 @@ int direccion_y(Posicion* a, Posicion* b)
 	}
 }
 
-char posiciones_distintas(Posicion* a, Posicion* b)
+char posiciones_distintas(Posicion* posa, Posicion* posb)
 {
-	if(a->z != b->z || a->b != b->b)
+	if(posa->z != posb->z || posa->b != posb->b)
 	{
 		return 'T';
 	}else{

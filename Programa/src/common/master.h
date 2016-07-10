@@ -54,6 +54,10 @@ int chose_white_move(Master* m, Linea* l, int seed);
 
 void conectar_linea_a_edificio(Master* m, Linea* l, int b);
 
+void limpiar_linea(Master* m, Linea* l);
+
+void desconectar_linea(Master* m, Linea* l);
+
 //------------------------------------		FALTA	 	-----------------------------------------//
 
 

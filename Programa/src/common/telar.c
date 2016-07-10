@@ -247,7 +247,6 @@ void set_dintacias_otras_lineas_desde_linea(Telar* t, int color, int linea)
 	}
 }
 
-
 void reset_goal_linea(Telar* t, Linea* l)
 {
 	int i = 0;
@@ -262,6 +261,10 @@ void reset_goal_linea(Telar* t, Linea* l)
 				double dist_j = l->distancia_otras_lineas[j];
 				if(dist_j < min && dist_j != -1.0 && t->estados_de_lineas[t->index_en_lineas_por_color[i]+j] == 'W')
 				{
+					if(dist_j == 0)
+					{
+						fprintf(stderr, "WUT\n\n");
+					}
 					index = t->index_en_lineas_por_color[i]+j;
 					min = dist_j;
 				}

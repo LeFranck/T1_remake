@@ -38,6 +38,8 @@ NodoBacktracking* push_nodo_backtracking(NodoBacktracking* prev, NodoBacktrackin
 //me cabe la duda del retorno
 NodoBacktracking* pop_nodo_backtracking(NodoBacktracking* actual);
 
+void debug_print_solucion_desde_nodo(NodoBacktracking* n , int i );
+
 void print_solucion_desde_nodo(NodoBacktracking* actual);
 
 void destroy_nodo_backtracking(NodoBacktracking* n);
