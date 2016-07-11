@@ -83,6 +83,8 @@ void desenchufar_linea(Master* m , int linea);
 
 void dummy_conection(Master* m, int linea);
 
+void conectar_linea_alargar(Master* m, Linea* l);
+
 void Optimizar_largos(Master* m);
 void AntiMonopolio(Master* m);
 void descocer(Master* m);

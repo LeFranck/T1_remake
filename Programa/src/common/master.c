@@ -480,7 +480,34 @@ void solver_alargar_conection(Master* m)
 	int linea_candidata = buscar_candidato_a_desconectar(m);
 	desenchufar_linea(m,linea_candidata);
 	dummy_conection(m,linea_candidata);
-	conectar_linea(m, m->t->lineas[linea_candidata]);
+	conectar_linea_alargar(m, m->t->lineas[linea_candidata]);
+}
+
+
+void conectar_linea_alargar(Master* m, Linea* l)
+{
+	if(l->isReady!='T' && l->dead!='T'){
+			//CADA LINEA SABE DONDE PARTE SU SOLUCION
+			//l->inicio_solucion = m->s->cabeza;
+			while(l->isReady!='T' && l->dead!='T')
+			{
+				////fprintf(stderr, "Movere la linea %d que esta en estado %c\n",l->number, l->isReady );
+				mover_linea(m,l);
+				if(l->isReady!='T' && l->dead!='T'){
+					set_dintacias_otras_lineas_desde_linea(m->t, l->color, l->number);
+					reset_goal_linea(m->t, l);
+				}
+			}
+			if(l->isReady=='T')
+			{
+				//R de ready
+				m->t->estados_de_lineas[l->number] = 'R';
+				m->t->estados_de_lineas[l->goal] = 'R';
+			}else{
+				//D de dead
+				m->t->estados_de_lineas[l->number] = 'D';
+			}
+		}
 }
 
 int buscar_candidato_a_desconectar(Master* m)
@@ -555,7 +582,11 @@ void dummy_conection(Master* m, int linea)
 			b = j;
 		}
 	}
+	fprintf(stderr, "Cabeza z,b,x,y %d, %d, %d, %d\n", l->cabeza->z,l->cabeza->b, l->cabeza->x, l->cabeza->y );
+	fprintf(stderr, "Actual z,c1,c2,y %d, %d, %d\n", l->actual->z_index,l->actual->c1_index, l->actual->c2_index );		
 	conectar_linea_a_edificio(m,l,b);
+	fprintf(stderr, "Cabeza z,b,x,y %d, %d, %d, %d\n", l->cabeza->z,l->cabeza->b, l->cabeza->x, l->cabeza->y );
+	fprintf(stderr, "Actual z,c1,c2,y %d, %d, %d\n", l->actual->z_index,l->actual->c1_index, l->actual->c2_index );	
 	////fprintf(stderr,"Conecte linea %d al edificio %d\n",l->number,b);
 	//Expandir color
 	Zone* z = m->l->zones[l->cabeza->z];
@@ -563,7 +594,7 @@ void dummy_conection(Master* m, int linea)
 	Client* c_lejano = c1->linked[1]->linked[0];
 	c1->linked[1]->color = l->color;
 	c_lejano->color = l->color;
-
+	l->largo++;
 	int z_ = c_lejano->zone->index;
 	int b_ = c_lejano->index;
 	int x_ = c_lejano->zone->x;
@@ -571,6 +602,10 @@ void dummy_conection(Master* m, int linea)
 	Posicion* nueva = create_posicion(z_,b_,x_,y_);
 	//double dir = direccion_desde(nueva, m->t->lineas[l->goal]->cabeza);
 	actualizar_linea(l, nueva,'F',b);
+
+	fprintf(stderr, "Cabeza z,b,x,y %d, %d, %d, %d\n", l->cabeza->z,l->cabeza->b, l->cabeza->x, l->cabeza->y );
+	fprintf(stderr, "Actual z,c1,c2,y %d, %d, %d\n", l->actual->z_index,l->actual->c1_index, l->actual->c2_index );	
+	fprintf(stderr, "Prev z,c1,c2,y %d, %d, %d\n", l->actual->prev->z_index,l->actual->prev->c1_index, l->actual->prev->c2_index );	
 }
 
 void limpiar_linea(Master* m , Linea* l)
