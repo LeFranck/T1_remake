@@ -475,8 +475,103 @@ void IA_dead_lines2(Master* m)
 	}
 }
 
+void solver_alargar_conection(Master* m)
+{
+	int linea_candidata = buscar_candidato_a_desconectar(m);
+	desenchufar_linea(m,linea_candidata);
+	dummy_conection(m,linea_candidata);
+	conectar_linea(m, m->t->lineas[linea_candidata]);
+}
 
+int buscar_candidato_a_desconectar(Master* m)
+{
+	int i = 0;
+	int j = 0;
+	int largo_candidato = 10000000;
+	int index_candidato = -1;
+	for(i = 0; i < m->t->lineas_count; i++)
+	{
+		if(m->t->lineas[i]->largo > 0)
+		{
+			int z_cabeza = m->t->lineas[i]->cabeza->z;
+			for(j = 0; j < m->l->zones[z_cabeza]->building_count ; j++)
+			{
+				if(!city_client_is_taken(m->l->zones[z_cabeza]->buildings[j]))
+				{
+					if(m->t->lineas[i]->largo < largo_candidato)
+					{
+						largo_candidato = m->t->lineas[i]->largo;
+						index_candidato = i;
+					}
+				}
+			}
+		}
+	}
+	return index_candidato;
+}
 
+void desenchufar_linea(Master* m , int linea)
+{
+	Linea* l = m->t->lineas[linea];
+	Linea* goal = m->t->lineas[l->goal];
+	Client* c1 = m->l->zones[l->cabeza->z]->buildings[l->cabeza->b];
+	Client* c2 = c1->linked[1];
+	Posicion* cabeza_previa = create_posicion(l->cabeza->z, c2->index,l->cabeza->x,l->cabeza->y);
+	l->cabeza = cabeza_previa;
+	c2->linked[1] = NULL;
+	c2->link_count--;
+	c1->linked[1] = NULL;
+	c1->link_count--;
+	NodoBacktracking* n = pop_nodo_backtracking(l->actual);
+	n->z_index = 0;
+	n->c1_index = 0;
+	n->c2_index = 0;
+	int i = 0;
+	for(i = 0; i < 8 ; i++){
+		n->opciones[i] = 'F';
+	}
+	l->actual = n;
+	l->isReady = 'F';
+	l->dead = 'F';
+	l->deadEnd = 'F';
+	l->actual->meta = 'F';
+	m->t->estados_de_lineas[l->number] = 'W';
+	goal->isReady = 'F';
+	goal->dead = 'F';
+	goal->deadEnd = 'F';
+	m->t->estados_de_lineas[goal->number] = 'W';
+}
+
+void dummy_conection(Master* m, int linea)
+{
+	Linea* l = m->t->lineas[linea];
+	int z_cabeza = l->cabeza->z;
+	int b = -1;
+	int j = 0;
+	for(j = 0; j < m->l->zones[z_cabeza]->building_count ; j++)
+	{
+		if(city_client_is_blank(m->l->zones[z_cabeza]->buildings[j]))
+		{
+			b = j;
+		}
+	}
+	conectar_linea_a_edificio(m,l,b);
+	////fprintf(stderr,"Conecte linea %d al edificio %d\n",l->number,b);
+	//Expandir color
+	Zone* z = m->l->zones[l->cabeza->z];
+	Client* c1 = z->buildings[l->cabeza->b];
+	Client* c_lejano = c1->linked[1]->linked[0];
+	c1->linked[1]->color = l->color;
+	c_lejano->color = l->color;
+
+	int z_ = c_lejano->zone->index;
+	int b_ = c_lejano->index;
+	int x_ = c_lejano->zone->x;
+	int y_ = c_lejano->zone->y;
+	Posicion* nueva = create_posicion(z_,b_,x_,y_);
+	//double dir = direccion_desde(nueva, m->t->lineas[l->goal]->cabeza);
+	actualizar_linea(l, nueva,'F',b);
+}
 
 void limpiar_linea(Master* m , Linea* l)
 {

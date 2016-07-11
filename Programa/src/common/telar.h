@@ -54,8 +54,4 @@ void reset_goal_linea(Telar* t, Linea* l);
 void print_solucion_final_desde_telar(Telar* t);
 
 
-
-
-
-
 #endif

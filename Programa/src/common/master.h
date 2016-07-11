@@ -75,6 +75,14 @@ void IA_dead_lines1(Master* m);
 
 void IA_dead_lines2(Master* m);
 
+void solver_alargar_conection(Master* m);
+
+int buscar_candidato_a_desconectar(Master* m);
+
+void desenchufar_linea(Master* m , int linea);
+
+void dummy_conection(Master* m, int linea);
+
 void Optimizar_largos(Master* m);
 void AntiMonopolio(Master* m);
 void descocer(Master* m);
