@@ -342,26 +342,30 @@ int building4_get_building_4sides(int direccion_x, int direccion_y, int randomne
 
 void print_linea(Linea* l)
 {
-	fprintf(stderr,"\n");
-	fprintf(stderr,"linea number: %d\n",l->number);
-	fprintf(stderr,"Inicio\n");
-	print_posicion(l->inicio);
-	fprintf(stderr,"Cabeza\n");
-	print_posicion(l->cabeza);
-	fprintf(stderr,"\tIs Ready: %c\n",l->isReady);
-	fprintf(stderr,"\tIs Dead: %c\n",l->dead);
-	fprintf(stderr,"\tIs DeadEnd: %c\n",l->deadEnd);
-	fprintf(stderr,"\tgoal: %d\n",l->goal);
-	fprintf(stderr,"\tcolor: %d",l->color);
-	fprintf(stderr,"\talimentada: %c",l->alimentada);
-	fprintf(stderr,"\n");
-	int i = 0;
-	for(i = 0; i < l->lineas_compatibles_count; i++)
-	{
-		fprintf(stderr, ", %f", l->distancia_otras_lineas[i]);
+	//Actual debuggind landprotector
+	if(l->color == 4){
+		fprintf(stderr,"\n");
+		fprintf(stderr,"linea number: %d\n",l->number);
+		fprintf(stderr,"Inicio\n");
+		print_posicion(l->inicio);
+		fprintf(stderr,"Cabeza\n");
+		print_posicion(l->cabeza);
+		fprintf(stderr,"\tIs Ready: %c\n",l->isReady);
+		fprintf(stderr,"\tIs Dead: %c\n",l->dead);
+		fprintf(stderr,"\tIs DeadEnd: %c\n",l->deadEnd);
+		fprintf(stderr,"\tgoal: %d\n",l->goal);
+		fprintf(stderr,"\tlargo: %d\n",l->largo);
+		fprintf(stderr,"\tcolor: %d",l->color);
+		fprintf(stderr,"\talimentada: %c",l->alimentada);
+		fprintf(stderr,"\n");
+		int i = 0;
+		for(i = 0; i < l->lineas_compatibles_count; i++)
+		{
+			fprintf(stderr, ", %f", l->distancia_otras_lineas[i]);
+		}
+		fprintf(stderr, "]\n" );
+		debug_print_solucion_desde_nodo(l->actual,0);
 	}
-	fprintf(stderr, "]\n" );
-	debug_print_solucion_desde_nodo(l->actual,0);
 }
 
 void destrot_linea(Linea* l)

@@ -22,43 +22,36 @@ int main(int argc, char const *argv[])
 	//solve_puzzle(m, 'l');
 	print_telar(m->t);
 	
-	//tejer(m);
-	conectar_linea(m,m->t->lineas[0]);
-	conectar_linea(m,m->t->lineas[1]);
-	conectar_linea(m,m->t->lineas[2]);
-	conectar_linea(m,m->t->lineas[3]);
-	int i = 0;
-	//for(i = 0; i < m->t->lineas_count; i++)
-	//{
-	//	limpiar_linea(m,m->t->lineas[i]);
-		//fprintf(stderr, "linea %d meta %d\n",i,m->t->lineas[i]->goal );
-	//}
-
-	
-	//print_telar(m->t);
-	
-
-
-	//limpiar_linea(m,m->t->lineas[5]);
-	print_linea(m->t->lineas[0]);
-	print_linea(m->t->lineas[1]);
-	//print_telar(m->t);
-	print_linea(m->t->lineas[2]);
-	print_linea(m->t->lineas[3]);
-
-	limpiar_linea(m,m->t->lineas[3]);
-	limpiar_linea(m,m->t->lineas[2]);
-
-	print_linea(m->t->lineas[3]);
-	print_linea(m->t->lineas[2]);
-	
-	reset_goal_linea(m->t, m->t->lineas[2]);
-	print_linea(m->t->lineas[3]);
-	conectar_linea(m,m->t->lineas[2]);
-
+	tejer(m);
+	//conectar_linea(m,m->t->lineas[0]);
+	//conectar_linea(m,m->t->lineas[1]);
+	//conectar_linea(m,m->t->lineas[2]);
 	//conectar_linea(m,m->t->lineas[3]);
+	m->stats = update_stats(m->t, m->l, m->stats);
+	print_stats(m->stats);
+	deal_with_dead_lines(m);
+	//fprintf(stderr, "----------------------------------\n" );
+	//print_linea(m->t->lineas[12]);
+	//limpiar_linea(m,m->t->lineas[12]);
+	//limpiar_linea(m,m->t->lineas[13]);
+	//limpiar_linea(m,m->t->lineas[38]);
+	//limpiar_linea(m,m->t->lineas[35]);
+//
+	//fprintf(stderr, "---------------Limpiada----------------\n" );
+	////print_linea(m->t->lineas[13]);
+	////reset_goal_linea(m->t, m->t->lineas[13]);
+	////fprintf(stderr, "---------------Set goal----------------\n" );
+	////print_linea(m->t->lineas[13]);
+	////conectar_linea(m,m->t->lineas[13]);
+////
+	//reset_goal_linea(m->t, m->t->lineas[35]);
+	//fprintf(stderr, "---------------Set goal----------------\n" );
+	//print_linea(m->t->lineas[35]);
+	//conectar_linea(m,m->t->lineas[35]);
 
-	print_linea(m->t->lineas[3]);
+	////conectar_linea(m,m->t->lineas[3]);
+
+	//print_linea(m->t->lineas[3]);
 	//print_linea(m->t->lineas[3]);
 	//calcular_opciones_linea(m,m->t->lineas[0]);
 	//reset_goal_linea(m->t,m->t->lineas[0]);

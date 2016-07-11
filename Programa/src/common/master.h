@@ -63,6 +63,8 @@ void desconectar_linea(Master* m, Linea* l);
 
 //------------------------------------		VACIOS	 	-----------------------------------------//
 
+void deal_with_dead_lines(Master* m);
+
 void Optimizar_largos(Master* m);
 void AntiMonopolio(Master* m);
 void descocer(Master* m);

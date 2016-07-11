@@ -336,6 +336,36 @@ void Solve(Master* m)
 	}
 }
 
+void deal_with_dead_lines(Master* m)
+{
+	if(m->stats->lineas_muertas_count != 0)
+	{
+		Linea* larga = m->t->lineas[m->stats->linea_mas_larga];
+		Linea* larga_contraparte = m->t->lineas[larga->goal];
+		limpiar_linea(m,larga_contraparte);
+		limpiar_linea(m,larga);
+	}
+	int i =0;
+	for(i = 0; i < m->t->lineas_count; i++)
+	{
+		Linea* linea = m->t->lineas[i];
+		if(linea->dead == 'T')
+		{
+			limpiar_linea(m,linea);
+		}
+	}
+	for(i = 0; i < m->t->lineas_count; i++)
+	{
+		Linea* linea = m->t->lineas[i];
+		if(m->t->estados_de_lineas[i] == 'W')
+		{
+			reset_goal_linea(m->t, m->t->lineas[i]);
+		}
+	}
+
+	tejer(m);
+}
+
 void limpiar_linea(Master* m , Linea* l)
 {
 	if(!l->actual)
@@ -345,10 +375,8 @@ void limpiar_linea(Master* m , Linea* l)
 		l->deadEnd = 'F';
 		m->t->estados_de_lineas[l->number] = 'W';
 	}else{
-		if(l->dead== 'T')
+		if(l->isReady == 'T')
 		{
-
-		}else{
 			Client* c1 = m->l->zones[l->cabeza->z]->buildings[l->cabeza->b];
 			Client* c2 = c1->linked[1];
 			Posicion* cabeza_previa = create_posicion(l->cabeza->z, c2->index,l->cabeza->x,l->cabeza->y);
@@ -370,14 +398,36 @@ void limpiar_linea(Master* m , Linea* l)
 			l->dead = 'F';
 			l->deadEnd = 'F';
 			m->t->estados_de_lineas[l->number] = 'W';
+			l->largo--;
+			if(l->largo > 0){
+				while(l->largo > 0 )
+				{
+					retroceder_linea(m,l);
+				}
+				l->actual->z_index = 0;
+				l->actual->c1_index = 0;
+				l->actual->c2_index = 0;
+			}
+
+		}else{
+			if(l->largo > 0)
+			{
+				while(l->largo > 0 )
+				{
+					retroceder_linea(m,l);
+				}
+				l->actual->z_index = 0;
+				l->actual->c1_index = 0;
+				l->actual->c2_index = 0;
+			}
+		l->isReady = 'F';
+		l->dead = 'F';
+		l->deadEnd = 'F';
+		m->t->estados_de_lineas[l->number] = 'W';
 		}
 	}
 }
 
-void setear_meta_linea_limpia()
-{
-
-}
 
 //------------------------------------Falta Completar -----------------------------------------//
 void descocer(Master* m)
