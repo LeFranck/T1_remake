@@ -323,6 +323,11 @@ void print_solucion_final_desde_telar(Telar* t)
 	int i = 0;
 	for(i = 0; i < t->lineas_count; i++)
 	{
-		print_solucion_desde_nodo(t->lineas[i]->actual);
+		print_linea(t->lineas[i]);
+		if(t->lineas[i]->largo > 0)
+		{
+			fprintf(stderr, "ME CAIGO ACA :( i es %d\n" ,i);
+			print_solucion_desde_nodo(t->lineas[i]->actual);
+		}
 	}
 }

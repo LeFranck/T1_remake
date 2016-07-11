@@ -21,7 +21,6 @@ int main(int argc, char const *argv[])
 	set_lines_goals(m->t);
 	//solve_puzzle(m, 'l');
 	print_telar(m->t);
-	
 	tejer(m);
 	//conectar_linea(m,m->t->lineas[0]);
 	//conectar_linea(m,m->t->lineas[1]);
@@ -36,14 +35,14 @@ int main(int argc, char const *argv[])
 	//limpiar_linea(m,m->t->lineas[13]);
 	//limpiar_linea(m,m->t->lineas[38]);
 	//limpiar_linea(m,m->t->lineas[35]);
-//
+
 	//fprintf(stderr, "---------------Limpiada----------------\n" );
 	////print_linea(m->t->lineas[13]);
 	////reset_goal_linea(m->t, m->t->lineas[13]);
 	////fprintf(stderr, "---------------Set goal----------------\n" );
 	////print_linea(m->t->lineas[13]);
 	////conectar_linea(m,m->t->lineas[13]);
-////
+
 	//reset_goal_linea(m->t, m->t->lineas[35]);
 	//fprintf(stderr, "---------------Set goal----------------\n" );
 	//print_linea(m->t->lineas[35]);
@@ -63,6 +62,7 @@ int main(int argc, char const *argv[])
 	//conectar_linea(m,m->t->lineas[2]);
 	/* TODO IMPRIMIR DECISIONES */
 	//print_solucion_output_parcial(m->s);
+	//print_solucion_desde_nodo(prueba->actual);
 	print_solucion_final_desde_telar(m->t);
 	/* Indicamos al watcher y al judge que ya terminamos */	
 	printf("END\n");

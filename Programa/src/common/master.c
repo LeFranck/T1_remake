@@ -144,6 +144,7 @@ void conectar_linea(Master* m, Linea* l)
 {
 	if(l->isReady!='T')
 	{
+		l->actual = malloc(sizeof(NodoBacktracking));
 		l->actual = create_nodo_backtracking(l->number);
 	}
 	if(l->isReady!='T' && l->dead!='T'){
@@ -427,8 +428,6 @@ void limpiar_linea(Master* m , Linea* l)
 		}
 	}
 }
-
-
 //------------------------------------Falta Completar -----------------------------------------//
 void descocer(Master* m)
 {

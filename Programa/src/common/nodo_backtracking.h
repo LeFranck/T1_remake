@@ -25,7 +25,7 @@ typedef struct NodoBacktracking
 	uint8_t c1_index;
 	uint8_t c2_index;
 
-
+	int has_prev;
 	struct NodoBacktracking* prev;
 } NodoBacktracking;
 
