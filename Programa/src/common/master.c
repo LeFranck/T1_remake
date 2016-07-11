@@ -3,6 +3,8 @@
 #include "solucion.h"
 #include "stats.h"
 #include "nodo_backtracking.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 //------------------------------------		LISTOS	 	-----------------------------------------//
 Master* create_master(Layout* l)
@@ -122,6 +124,7 @@ int chose_white_move(Master* m , Linea* l, int seed)
 		return movimiento_estilo_d(l,building_obj);
 	}
 }
+
 //agregar conexion en funcion del index linea o al final???
 void conectar_linea_a_edificio(Master* m, Linea* l, int b)
 {
@@ -337,7 +340,22 @@ void Solve(Master* m)
 	}
 }
 
-void deal_with_dead_lines(Master* m)
+void solve_deads_lines(Master* m, int IA)
+{
+	if(IA == 0)
+	{
+		IA_dead_lines0(m);
+	}else if(IA == 1)
+	{
+		IA_dead_lines1(m);
+	}else if(IA == 2){
+		IA_dead_lines2(m);
+	}else{
+		fprintf(stderr, "NO SEED\n");
+	}
+}
+
+void deal_with_dead_lines0(Master* m)
 {
 	if(m->stats->lineas_muertas_count != 0)
 	{
@@ -367,26 +385,98 @@ void deal_with_dead_lines(Master* m)
 	tejer(m);
 }
 
-void solve_deads_lines(Master* m, int IA)
+//Limpia la larga_number
+//Conecta las deads, conecta la que limpio al inicio
+void deal_with_dead_lines1(Master* m, int larga_number)
 {
-	if(IA == 0)
+	Linea* larga = m->t->lineas[larga_number];
+	Linea* larga_contraparte = m->t->lineas[larga->goal];
+	limpiar_linea(m,larga_contraparte);
+	limpiar_linea(m,larga);
+
+	int i =0;
+	int j = 0;
+	int* muertas = malloc(sizeof(int)*m->stats->lineas_muertas_count);
+	for(i = 0; i < m->t->lineas_count; i++)
 	{
-		IA_dead_lines0(m);
+		Linea* linea = m->t->lineas[i];
+		if(linea->dead == 'T')
+		{
+			limpiar_linea(m,linea);
+			muertas[j] = i;
+			j++;
+		}
 	}
+	for(i = 0; i < m->t->lineas_count; i++)
+	{
+		Linea* linea = m->t->lineas[i];
+		if(m->t->estados_de_lineas[i] == 'W')
+		{
+			reset_goal_linea(m->t, linea);
+		}
+	}
+	for(i = 0; i < m->stats->lineas_muertas_count; i++)
+	{
+		reset_goal_linea(m->t,m->t->lineas[muertas[i]]);
+		conectar_linea(m,m->t->lineas[muertas[i]]);
+	}
+	reset_goal_linea(m->t, larga_contraparte);
+	conectar_linea(m,larga_contraparte);
 }
+
+
 
 void IA_dead_lines0(Master* m)
 {
 	int i = 0;
 	while(m->stats->lineas_muertas_count != 0 )
 	{
-		deal_with_dead_lines(m);
+		deal_with_dead_lines0(m);
+		m->stats = update_stats(m->t, m->l, m->stats);
+		fprintf(stderr, "%d\n",i );
+		i++;
+		if(i == 100){m->stats->lineas_muertas_count = 0;}
+	}
+}
+
+void IA_dead_lines1(Master* m)
+{
+	int i = 0;
+	while(m->stats->lineas_muertas_count != 0 )
+	{
+		deal_with_dead_lines1(m, m->stats->linea_mas_larga);
 		m->stats = update_stats(m->t, m->l, m->stats);
 		fprintf(stderr, "%d\n",i );
 		i++;
 		if(i == 1000){m->stats->lineas_muertas_count = 0;}
 	}
 }
+
+//Random 
+void IA_dead_lines2(Master* m)
+{
+	int i = 0;
+	while(m->stats->lineas_muertas_count != 0 )
+	{
+		time_t t;
+   		srand((unsigned) time(&t));
+		int random =  rand() % m->t->lineas_count ;
+   		int number = ((random + i )%m->t->lineas_count);
+   		while(m->t->lineas[number]->largo <= 0)
+   		{
+   			random = rand() % m->t->lineas_count ;
+   			number = ((random + i )%m->t->lineas_count);
+   		}
+		deal_with_dead_lines1(m, number);
+		m->stats = update_stats(m->t, m->l, m->stats);
+		fprintf(stderr, "itareacion %d\t number: %d\n",i,number );
+		i++;
+		if(i == 1000){m->stats->lineas_muertas_count = 0;}
+	}
+}
+
+
+
 
 void limpiar_linea(Master* m , Linea* l)
 {
