@@ -65,7 +65,9 @@ void desconectar_linea(Master* m, Linea* l);
 
 void deal_with_dead_lines(Master* m);
 
-void solve_deads_lines(Master* m);
+void solve_deads_lines(Master* m, int IA);
+
+void IA_dead_lines0(Master* m);
 
 void Optimizar_largos(Master* m);
 void AntiMonopolio(Master* m);

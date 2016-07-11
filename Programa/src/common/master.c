@@ -367,7 +367,15 @@ void deal_with_dead_lines(Master* m)
 	tejer(m);
 }
 
-void solve_deads_lines(Master* m)
+void solve_deads_lines(Master* m, int IA)
+{
+	if(IA == 0)
+	{
+		IA_dead_lines0(m);
+	}
+}
+
+void IA_dead_lines0(Master* m)
 {
 	int i = 0;
 	while(m->stats->lineas_muertas_count != 0 )
@@ -376,7 +384,7 @@ void solve_deads_lines(Master* m)
 		m->stats = update_stats(m->t, m->l, m->stats);
 		fprintf(stderr, "%d\n",i );
 		i++;
-		if(i == 100){m->stats->lineas_muertas_count = 0;}
+		if(i == 1000){m->stats->lineas_muertas_count = 0;}
 	}
 }
 
