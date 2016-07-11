@@ -14,6 +14,7 @@ Master* create_master(Layout* l)
 	m->t = create_telar(l);
 	m->s = create_solucion(m->t->c_m);
 	m->stats = create_stats(m->t);
+	m->stats->conexiones_max = m->s->conexiones_max; 
 	return m;
 }
 
@@ -140,6 +141,7 @@ void conectar_linea_a_edificio(Master* m, Linea* l, int b)
 	l->actual->z_index = z->index;
 	l->actual->c1_index = c1->index;
 	l->actual->c2_index = c2->index;
+
 	//agregar_conexion_a_solucion(m->s,z->index,c1->index,c2->index);
 }
 
@@ -475,16 +477,21 @@ void IA_dead_lines2(Master* m)
 	}
 }
 
-void solver_alargar_conection(Master* m)
+char solver_alargar_conection0(Master* m)
 {
-	int linea_candidata = buscar_candidato_a_desconectar(m);
-	desenchufar_linea(m,linea_candidata);
-	dummy_conection(m,linea_candidata);
-	conectar_linea_alargar(m, m->t->lineas[linea_candidata]);
+	int linea_candidata = buscar_candidato_a_desconectar0(m);
+	if(linea_candidata == -1)
+	{
+		return 'F';
+	}else{
+		desenchufar_linea0(m,linea_candidata);
+		dummy_conection0(m,linea_candidata);
+		conectar_linea_alargar0(m, m->t->lineas[linea_candidata]);
+		return 'T';
+	}
 }
 
-
-void conectar_linea_alargar(Master* m, Linea* l)
+void conectar_linea_alargar0(Master* m, Linea* l)
 {
 	if(l->isReady!='T' && l->dead!='T'){
 			//CADA LINEA SABE DONDE PARTE SU SOLUCION
@@ -510,7 +517,7 @@ void conectar_linea_alargar(Master* m, Linea* l)
 		}
 }
 
-int buscar_candidato_a_desconectar(Master* m)
+int buscar_candidato_a_desconectar0(Master* m)
 {
 	int i = 0;
 	int j = 0;
@@ -537,7 +544,7 @@ int buscar_candidato_a_desconectar(Master* m)
 	return index_candidato;
 }
 
-void desenchufar_linea(Master* m , int linea)
+void desenchufar_linea0(Master* m , int linea)
 {
 	Linea* l = m->t->lineas[linea];
 	Linea* goal = m->t->lineas[l->goal];
@@ -569,7 +576,7 @@ void desenchufar_linea(Master* m , int linea)
 	m->t->estados_de_lineas[goal->number] = 'W';
 }
 
-void dummy_conection(Master* m, int linea)
+void dummy_conection0(Master* m, int linea)
 {
 	Linea* l = m->t->lineas[linea];
 	int z_cabeza = l->cabeza->z;
@@ -582,11 +589,7 @@ void dummy_conection(Master* m, int linea)
 			b = j;
 		}
 	}
-	fprintf(stderr, "Cabeza z,b,x,y %d, %d, %d, %d\n", l->cabeza->z,l->cabeza->b, l->cabeza->x, l->cabeza->y );
-	fprintf(stderr, "Actual z,c1,c2,y %d, %d, %d\n", l->actual->z_index,l->actual->c1_index, l->actual->c2_index );		
 	conectar_linea_a_edificio(m,l,b);
-	fprintf(stderr, "Cabeza z,b,x,y %d, %d, %d, %d\n", l->cabeza->z,l->cabeza->b, l->cabeza->x, l->cabeza->y );
-	fprintf(stderr, "Actual z,c1,c2,y %d, %d, %d\n", l->actual->z_index,l->actual->c1_index, l->actual->c2_index );	
 	////fprintf(stderr,"Conecte linea %d al edificio %d\n",l->number,b);
 	//Expandir color
 	Zone* z = m->l->zones[l->cabeza->z];
@@ -602,10 +605,6 @@ void dummy_conection(Master* m, int linea)
 	Posicion* nueva = create_posicion(z_,b_,x_,y_);
 	//double dir = direccion_desde(nueva, m->t->lineas[l->goal]->cabeza);
 	actualizar_linea(l, nueva,'F',b);
-
-	fprintf(stderr, "Cabeza z,b,x,y %d, %d, %d, %d\n", l->cabeza->z,l->cabeza->b, l->cabeza->x, l->cabeza->y );
-	fprintf(stderr, "Actual z,c1,c2,y %d, %d, %d\n", l->actual->z_index,l->actual->c1_index, l->actual->c2_index );	
-	fprintf(stderr, "Prev z,c1,c2,y %d, %d, %d\n", l->actual->prev->z_index,l->actual->prev->c1_index, l->actual->prev->c2_index );	
 }
 
 void limpiar_linea(Master* m , Linea* l)

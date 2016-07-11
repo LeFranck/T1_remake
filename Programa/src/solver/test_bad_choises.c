@@ -29,7 +29,15 @@ int main(int argc, char const *argv[])
 	m->stats = update_stats(m->t, m->l, m->stats);
 	print_stats(m->stats);
 	solve_deads_lines(m,2);
-	solver_alargar_conection(m);
+	int i = 0;
+	char r = solver_alargar_conection0(m);
+	while(r != 'F')
+	{
+		r = solver_alargar_conection0(m);
+	}
+	m->stats = update_stats(m->t, m->l, m->stats);
+	print_stats(m->stats);
+
 	//deal_with_dead_lines(m);
 	//fprintf(stderr, "----------------------------------\n" );
 	//print_linea(m->t->lineas[12]);

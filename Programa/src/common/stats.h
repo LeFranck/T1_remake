@@ -19,7 +19,7 @@ struct stats
 	int lineas_readys_count;
 	int lineas_waiting_count;
 	int lineas_count;
-
+	int conexiones_max;
 
 	double largo_promedio;
 	int edificios_listos;

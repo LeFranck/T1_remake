@@ -7,6 +7,7 @@ Stats* create_stats(Telar* t)
 	r->lineas_count = t->lineas_count;
 	r->linea_mas_larga = -1;
 	r->largo_max = -1;
+	r->conexiones_max = -1;
 	//De las con largo mayor a 0 
 	r->linea_mas_corta = -1;
 	r->largo_min = 100000000;
