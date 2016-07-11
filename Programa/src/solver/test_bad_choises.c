@@ -28,7 +28,8 @@ int main(int argc, char const *argv[])
 	//conectar_linea(m,m->t->lineas[3]);
 	m->stats = update_stats(m->t, m->l, m->stats);
 	print_stats(m->stats);
-	deal_with_dead_lines(m);
+	solve_deads_lines(m);
+	//deal_with_dead_lines(m);
 	//fprintf(stderr, "----------------------------------\n" );
 	//print_linea(m->t->lineas[12]);
 	//limpiar_linea(m,m->t->lineas[12]);

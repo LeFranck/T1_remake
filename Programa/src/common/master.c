@@ -360,11 +360,24 @@ void deal_with_dead_lines(Master* m)
 		Linea* linea = m->t->lineas[i];
 		if(m->t->estados_de_lineas[i] == 'W')
 		{
-			reset_goal_linea(m->t, m->t->lineas[i]);
+			reset_goal_linea(m->t, linea);
 		}
 	}
 
 	tejer(m);
+}
+
+void solve_deads_lines(Master* m)
+{
+	int i = 0;
+	while(m->stats->lineas_muertas_count != 0 )
+	{
+		deal_with_dead_lines(m);
+		m->stats = update_stats(m->t, m->l, m->stats);
+		fprintf(stderr, "%d\n",i );
+		i++;
+		if(i == 100){m->stats->lineas_muertas_count = 0;}
+	}
 }
 
 void limpiar_linea(Master* m , Linea* l)

@@ -24,6 +24,19 @@ Stats* create_stats(Telar* t)
 Stats* update_stats(Telar* t, Layout*  l, Stats* r)
 {
 
+	r->linea_mas_larga = -1;
+	r->largo_max = -1;
+	//De las con largo mayor a 0 
+	r->linea_mas_corta = -1;
+	r->largo_min = 100000000;
+	r->lineas_muertas_count = 0;
+	r->lineas_readys_count = 0;
+	r->lineas_waiting_count = 0;
+	r->largo_promedio = 0;
+	r->edificios_listos = 0;
+	r->edificios_faltantes = 0;
+	r->zonas_listas = 0;
+	r->zonas_faltantes = 0;
 	int i = 0;
 	r->largo_promedio = 0;
 	for(i = 0; i < r->lineas_count; i++)
