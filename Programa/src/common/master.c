@@ -46,10 +46,10 @@ void avanzar_linea(Master* m, Linea* l)
 	if(l->actual->meta == 'T')
 	{
 		conectar_meta(m,l);
-		fprintf(stderr,"Conecte a meta\n");
+		//fprintf(stderr,"Conecte a meta\n");
 	}else{
 		conectar_a_blanco(m,l);
-		//fprintf(stderr,"Conecte a blanco\n");
+		////fprintf(stderr,"Conecte a blanco\n");
 	}
 
 	if(l->randomnes == 0){
@@ -62,7 +62,7 @@ void avanzar_linea(Master* m, Linea* l)
 void conectar_meta(Master* m, Linea* l)
 {
 	//No tengo que pintar a nadie :)
-	fprintf(stderr,"Conectareeeee linea %d a la meta %d\n",l->number,m->t->lineas[l->goal]->cabeza->b);
+	//fprintf(stderr,"Conectareeeee linea %d a la meta %d\n",l->number,m->t->lineas[l->goal]->cabeza->b);
 	conectar_linea_a_edificio(m, l, m->t->lineas[l->goal]->cabeza->b);
 	//actualizar datos en ambas lineas
 	//double dir = direccion_desde(l->cabeza, m->t->lineas[l->goal]->cabeza);
@@ -78,9 +78,9 @@ void conectar_a_blanco(Master* m, Linea* l)
 	//Problemas seed 3 y 4
 	int b = chose_white_move(m, l, 2);
 	//int b = chose_white_move(m, l, 1);
-	//fprintf(stderr,"Conectareeeee linea %d al edificio %d\n",l->number,b);
+	////fprintf(stderr,"Conectareeeee linea %d al edificio %d\n",l->number,b);
 	conectar_linea_a_edificio(m,l,b);
-	//fprintf(stderr,"Conecte linea %d al edificio %d\n",l->number,b);
+	////fprintf(stderr,"Conecte linea %d al edificio %d\n",l->number,b);
 	//Expandir color
 	Zone* z = m->l->zones[l->cabeza->z];
 	Client* c1 = z->buildings[l->cabeza->b];
@@ -137,7 +137,7 @@ void conectar_linea_a_edificio(Master* m, Linea* l, int b)
 	l->actual->z_index = z->index;
 	l->actual->c1_index = c1->index;
 	l->actual->c2_index = c2->index;
-	agregar_conexion_a_solucion(m->s,z->index,c1->index,c2->index);
+	//agregar_conexion_a_solucion(m->s,z->index,c1->index,c2->index);
 }
 
 void conectar_linea(Master* m, Linea* l)
@@ -152,7 +152,7 @@ void conectar_linea(Master* m, Linea* l)
 		//l->inicio_solucion = m->s->cabeza;
 		while(l->isReady!='T' && l->dead!='T')
 		{
-			//fprintf(stderr, "Movere la linea %d que esta en estado %c\n",l->number, l->isReady );
+			////fprintf(stderr, "Movere la linea %d que esta en estado %c\n",l->number, l->isReady );
 			mover_linea(m,l);
 			if(l->isReady!='T' && l->dead!='T'){
 				set_dintacias_otras_lineas_desde_linea(m->t, l->color, l->number);
@@ -181,7 +181,7 @@ void retroceder_linea(Master* m, Linea* l)
 		int b2 = l->actual->prev->c2_index;
 		//int x = m->l->zones[z]->x;
 		//int y = m->l->zones[z]->y;
-		//fprintf(stderr,"Retrocedere con %d movimientos y [x,y,b1,b2] = [%d,%d,%d,%d] \n", l->largo,x,y,b1,b2);
+		////fprintf(stderr,"Retrocedere con %d movimientos y [x,y,b1,b2] = [%d,%d,%d,%d] \n", l->largo,x,y,b1,b2);
 		Client* c1 = m->l->zones[z]->buildings[b1];
 		Client* c2 = m->l->zones[z]->buildings[b2];
 		//Lavo los inter-zonas
@@ -205,9 +205,9 @@ void retroceder_linea(Master* m, Linea* l)
 		l->actual = nod;
 		l->actual->opciones[b2] = 'P';
 	}else{
-		//fprintf(stderr,"Estoy tratando de retroceder una linea sin movs \n");
-		//fprintf(stderr,"Tiene %d movimientos \n", l->largo);
-		//fprintf(stderr,"DEAD LINE \n");
+		////fprintf(stderr,"Estoy tratando de retroceder una linea sin movs \n");
+		////fprintf(stderr,"Tiene %d movimientos \n", l->largo);
+		////fprintf(stderr,"DEAD LINE \n");
 		l->actual->z_index = 0;
 		l->actual->c1_index = 0;
 		l->actual->c2_index = 0;
@@ -223,23 +223,23 @@ void tejer(Master* m)
 		//Si la meta de la linea esta ok
 		if(m->t->lineas[m->t->lineas[i]->goal]->isReady == 'T' || m->t->lineas[m->t->lineas[i]->goal]->dead == 'T')
 		{
-			fprintf(stderr,"La meta de la linea %d esta ok \n",i);
+			//fprintf(stderr,"La meta de la linea %d esta ok \n",i);
 			//Si la linea no esta ok
 			if(m->t->lineas[i]->isReady != 'T' && m->t->lineas[i]->dead != 'T')
 			{
 				//Cambio la meta de la linea
-				//fprintf(stderr,"Linea %d, meta: %d tomada\nPosicion meta ",i, m->t->lineas[i]->goal );
+				////fprintf(stderr,"Linea %d, meta: %d tomada\nPosicion meta ",i, m->t->lineas[i]->goal );
 				//print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
-				//fprintf(stderr,"RESET GOAL xq linea is%c\n",m->t->lineas[i]->isReady);
+				////fprintf(stderr,"RESET GOAL xq linea is%c\n",m->t->lineas[i]->isReady);
 				reset_goal_linea(m->t,m->t->lineas[i]);
-				//fprintf(stderr,"Nueva posicion meta\n" );
+				////fprintf(stderr,"Nueva posicion meta\n" );
 				print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
 			}
 		}
-		//fprintf(stderr,"\nLinea %d, meta: %d\n",i, m->t->lineas[i]->goal);
+		////fprintf(stderr,"\nLinea %d, meta: %d\n",i, m->t->lineas[i]->goal);
 		print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
 		conectar_linea(m, m->t->lineas[i]);
-		fprintf(stderr,"\n\n");
+		//fprintf(stderr,"\n\n");
 	}
 }
 
@@ -248,7 +248,7 @@ void mover_linea(Master* m,Linea* l)
 	calcular_opciones_linea(m,l);
 	if(l->deadEnd == 'T')
 	{
-		fprintf(stderr,"Retrocedere Linea %d ya que llego a un deadEnd\n\n\n",l->number);
+		//fprintf(stderr,"Retrocedere Linea %d ya que llego a un deadEnd\n\n\n",l->number);
 		//l->dead = 'T';
 		retroceder_linea(m,l);
 	}else{
@@ -272,12 +272,12 @@ void calcular_opciones_linea(Master* m, Linea* l)
 			{
 				l->actual->opciones[i] = 'T';
 				validas++;
-				fprintf(stderr, "HITO %d\n\n",i);
+				//fprintf(stderr, "HITO %d\n\n",i);
 			}
 			//Tengo a la meta en mi zona
 			if(z->buildings[i]->color == l->color && l->cabeza->b != i)
 			{
-				fprintf(stderr,"opcion %d Mismo color y distinto edifico que %d\n",i,l->cabeza->b);
+				//fprintf(stderr,"opcion %d Mismo color y distinto edifico que %d\n",i,l->cabeza->b);
 				l->actual->opciones[i] = 'T';
 				validas++;
 				l->actual->meta = 'T';
@@ -293,13 +293,13 @@ void calcular_opciones_linea(Master* m, Linea* l)
 		l->actual->validas_count = validas;
 	}
 	//DEBUG DEL DEADEND
-	fprintf(stderr,"Opciones linea %d: \n",l->number);
+	//fprintf(stderr,"Opciones linea %d: \n",l->number);
 	for(i = 0; i < 8; i++)
 	{
-		fprintf(stderr,"\t");
-		fprintf(stderr,"- [%d,%c]",i,l->actual->opciones[i]);
+		//fprintf(stderr,"\t");
+		//fprintf(stderr,"- [%d,%c]",i,l->actual->opciones[i]);
 	}
-	fprintf(stderr,"\n\n");
+	//fprintf(stderr,"\n\n");
 }
 
 void destroy_master(Master* m)
@@ -329,7 +329,7 @@ void Solve(Master* m)
 	while(m->s->ready != 'T')
 	{
 		tejer(m);
-		//fprintf(stderr,"Tejido completo \n ");
+		////fprintf(stderr,"Tejido completo \n ");
 		if(m->s->ready != 'T')
 		{
 			descocer(m);
@@ -369,7 +369,7 @@ void deal_with_dead_lines(Master* m)
 
 void limpiar_linea(Master* m , Linea* l)
 {
-	if(!l->actual)
+	if(l->largo == 0)
 	{
 		l->isReady = 'F';
 		l->dead = 'F';

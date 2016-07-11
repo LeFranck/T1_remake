@@ -75,10 +75,10 @@ char posiciones_distintas(Posicion* posa, Posicion* posb)
 
 void print_posicion(Posicion* p)
 {
-	fprintf(stderr,"\tz: %d\n",p->z);
-	fprintf(stderr,"\tb: %d\n",p->b);
-	fprintf(stderr,"\tx: %d\n",p->x);
-	fprintf(stderr,"\ty: %d\n",p->y);
+	//fprintf(stderr,"\tz: %d\n",p->z);
+	//fprintf(stderr,"\tb: %d\n",p->b);
+	//fprintf(stderr,"\tx: %d\n",p->x);
+	//fprintf(stderr,"\ty: %d\n",p->y);
 }
 
 void destroy_posicion(Posicion* p)

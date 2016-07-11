@@ -263,7 +263,7 @@ void reset_goal_linea(Telar* t, Linea* l)
 				{
 					if(dist_j == 0)
 					{
-						fprintf(stderr, "WUT\n\n");
+						//fprintf(stderr, "WUT\n\n");
 					}
 					index = t->index_en_lineas_por_color[i]+j;
 					min = dist_j;
@@ -277,28 +277,28 @@ void reset_goal_linea(Telar* t, Linea* l)
 void print_telar(Telar* t)
 {
 	int i = 0;
-	fprintf(stderr,"Se imprimira el telar\n");
-	fprintf(stderr,"\n");
+	//fprintf(stderr,"Se imprimira el telar\n");
+	//fprintf(stderr,"\n");
 	for(i = 0; i < t->lineas_count; i++)
 	{
 		print_linea(t->lineas[i]);
 	}
 	print_telar_colores(t);
-	fprintf(stderr,"\n");
+	//fprintf(stderr,"\n");
 }
 
 void print_telar_colores(Telar* t)
 {
 	int i = 0;
-	fprintf(stderr,"Se imprimiran los colores del telar\n");
-	fprintf(stderr,"\n");
-	fprintf(stderr,"Colores: \t[color, cantidad]\n ");
+	//fprintf(stderr,"Se imprimiran los colores del telar\n");
+	//fprintf(stderr,"\n");
+	//fprintf(stderr,"Colores: \t[color, cantidad]\n ");
 	for(i = 0; i < t->colores_count; i++)
 	{
-		fprintf(stderr,"\n");	
-		fprintf(stderr," [%d,%d] ,",t->colores[i],t->lineas_por_color[i]);
+		//fprintf(stderr,"\n");	
+		//fprintf(stderr," [%d,%d] ,",t->colores[i],t->lineas_por_color[i]);
 	}
-	fprintf(stderr,"\n");
+	//fprintf(stderr,"\n");
 }
 
 void destroy_telar(Telar* t)
@@ -326,7 +326,7 @@ void print_solucion_final_desde_telar(Telar* t)
 		print_linea(t->lineas[i]);
 		if(t->lineas[i]->largo > 0)
 		{
-			fprintf(stderr, "ME CAIGO ACA :( i es %d\n" ,i);
+			//fprintf(stderr, "ME CAIGO ACA :( i es %d\n" ,i);
 			print_solucion_desde_nodo(t->lineas[i]->actual);
 		}
 	}

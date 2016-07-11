@@ -73,8 +73,8 @@ void actualizar_linea(Linea* l, Posicion* nueva, char isReady, int building_toma
 		l->cabeza = nueva;
 	}
 	l->isReady = isReady;
-	//fprintf(stderr, "Linea %d ha sido actualizada.\n",l->number );
-	//fprintf(stderr, "Linea %d estado %c \n",l->number,l->isReady );
+	////fprintf(stderr, "Linea %d ha sido actualizada.\n",l->number );
+	////fprintf(stderr, "Linea %d estado %c \n",l->number,l->isReady );
 }
 
 //Movimiento a partir del building obj
@@ -214,7 +214,7 @@ int building8_get_building(int direccion_x, int direccion_y)
 	}else if(direccion_x == 1 && direccion_y == 1){
 		r = 7;
 	}else{
-		fprintf(stderr,"\n\n\nWTF b8\n\n\n");
+		//fprintf(stderr,"\n\n\nWTF b8\n\n\n");
 	}
 	return r;
 }
@@ -257,7 +257,7 @@ int building4_get_building_8sides(int direccion_x, int direccion_y, int dif_x, i
 		}else if(direccion_x == 1 && direccion_y == 1){
 			r = 3;
 		}else{
-			fprintf(stderr,"\n\n\nWTF b4 rombo\n\n\n");
+			//fprintf(stderr,"\n\n\nWTF b4 rombo\n\n\n");
 		}
 	}else{
 		//Caso cuadrado
@@ -294,7 +294,7 @@ int building4_get_building_8sides(int direccion_x, int direccion_y, int dif_x, i
 				r = 3;
 			}
 		}else{
-			fprintf(stderr,"\n\n\nWTF b4 cuadrado\n\n\n");
+			//fprintf(stderr,"\n\n\nWTF b4 cuadrado\n\n\n");
 		}
 	}
 	return r;
@@ -336,7 +336,7 @@ int building4_get_building_4sides(int direccion_x, int direccion_y, int randomne
 	}else if(direccion_x == 1 && direccion_y == 1){
 		r = 3;
 	}else{
-		fprintf(stderr,"\n\n\nWTF b4 sides 4\n\n\n");
+		//fprintf(stderr,"\n\n\nWTF b4 sides 4\n\n\n");
 	}
 	return r;
 }
@@ -344,28 +344,28 @@ int building4_get_building_4sides(int direccion_x, int direccion_y, int randomne
 void print_linea(Linea* l)
 {
 	//Actual debuggind landprotector
-	fprintf(stderr,"\n");
-	fprintf(stderr,"linea number: %d\n",l->number);
-	fprintf(stderr,"Inicio\n");
+	//fprintf(stderr,"\n");
+	//fprintf(stderr,"linea number: %d\n",l->number);
+	//fprintf(stderr,"Inicio\n");
 	print_posicion(l->inicio);
-	fprintf(stderr,"Cabeza\n");
+	//fprintf(stderr,"Cabeza\n");
 	print_posicion(l->cabeza);
-	fprintf(stderr,"\tIs Ready: %c\n",l->isReady);
-	fprintf(stderr,"\tIs Dead: %c\n",l->dead);
-	fprintf(stderr,"\tIs DeadEnd: %c\n",l->deadEnd);
-	fprintf(stderr,"\tgoal: %d\n",l->goal);
-	fprintf(stderr,"\tlargo: %d\n",l->largo);
-	fprintf(stderr,"\tcolor: %d\n",l->color);
-	fprintf(stderr,"\talimentada: %c",l->alimentada);
-	fprintf(stderr,"\n");
+	//fprintf(stderr,"\tIs Ready: %c\n",l->isReady);
+	//fprintf(stderr,"\tIs Dead: %c\n",l->dead);
+	//fprintf(stderr,"\tIs DeadEnd: %c\n",l->deadEnd);
+	//fprintf(stderr,"\tgoal: %d\n",l->goal);
+	//fprintf(stderr,"\tlargo: %d\n",l->largo);
+	//fprintf(stderr,"\tcolor: %d\n",l->color);
+	//fprintf(stderr,"\talimentada: %c",l->alimentada);
+	//fprintf(stderr,"\n");
 	int i = 0;
 	if(l->largo > 0)
 	{
 		for(i = 0; i < l->lineas_compatibles_count; i++)
 		{
-			fprintf(stderr, ", %f", l->distancia_otras_lineas[i]);
+			//fprintf(stderr, ", %f", l->distancia_otras_lineas[i]);
 		}
-		fprintf(stderr, "]\n" );
+		//fprintf(stderr, "]\n" );
 		debug_print_solucion_desde_nodo(l->actual,0);
 	}
 }

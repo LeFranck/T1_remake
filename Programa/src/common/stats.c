@@ -64,7 +64,7 @@ void print_stats(Stats* r)
 	fprintf(stderr, "La linea mas corta es %d\n" , r->linea_mas_corta);
 	fprintf(stderr, "El largo minimo es %d\n" , r-> largo_min);
 	fprintf(stderr, "El largo promedio de las linea es : %f" , r->largo_promedio);
-	fprintf(stderr, "De las %d lineas hay:\n" , r->lineas_count);
+	fprintf(stderr, "\nDe las %d lineas hay:\n" , r->lineas_count);
 	fprintf(stderr, "\tReadys %d\n" , r->lineas_readys_count);
 	fprintf(stderr, "\tWaiting %d\n" , r->lineas_waiting_count);
 	fprintf(stderr, "\tMuertas%d\n" , r->lineas_muertas_count);

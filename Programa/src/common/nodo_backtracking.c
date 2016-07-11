@@ -64,8 +64,8 @@ void print_solucion_desde_nodo(NodoBacktracking* actual)
 
 void debug_print_solucion_desde_nodo(NodoBacktracking* actual, int i )
 {
-	fprintf(stderr, "impresion %d\n", i);
-	fprintf(stderr,"LINK %zu %hhu %hhu\n", actual->z_index, actual->c1_index, actual->c2_index);
+	//fprintf(stderr, "impresion %d\n", i);
+	//fprintf(stderr,"LINK %zu %hhu %hhu\n", actual->z_index, actual->c1_index, actual->c2_index);
 	if(actual->has_prev == 1){
 		debug_print_solucion_desde_nodo(actual->prev,i+1);
 	}
