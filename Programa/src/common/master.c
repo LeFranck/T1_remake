@@ -141,7 +141,7 @@ void conectar_linea_a_edificio(Master* m, Linea* l, int b)
 	l->actual->z_index = z->index;
 	l->actual->c1_index = c1->index;
 	l->actual->c2_index = c2->index;
-
+	m->stats->conexiones_hechas++;
 	//agregar_conexion_a_solucion(m->s,z->index,c1->index,c2->index);
 }
 
@@ -198,6 +198,7 @@ void retroceder_linea(Master* m, Linea* l)
 		c2->linked[1] = NULL;
 		c2->link_count--;
 		l->largo--;
+		m->stats->conexiones_hechas--;
 		//Cambio la cabeza de la linea
 		l->cabeza->z = z;
 		l->cabeza->b = b1;
@@ -492,6 +493,69 @@ char solver_alargar_conection0(Master* m)
 	}
 }
 
+void solver_alargar_conexiones(Master* m)
+{
+	int k = 0;
+	while(m->stats->conexiones_hechas != m->stats->conexiones_max)
+	{
+		int i = 0;
+		//fprintf(stderr, "\n %d Desconecciones\n",k );
+		for( i = 0; i < m->t->lineas_count; i++)
+		{
+			if(m->stats->lineas_candidatas[i]== 'T')
+			{
+				if(linea_es_candidata(m,m->t->lineas[i])=='T')
+				{
+					desenchufar_linea0(m,i);
+					dummy_conection0(m,i);
+					conectar_linea_alargar0(m,m->t->lineas[i]);
+					k++;
+				}
+			}
+		}
+		//fprintf(stderr, "\n %d Desconecciones\n",k );
+		for(i = 0; i < m->t->lineas_count; i++)
+		{
+			if(m->stats->lineas_candidatas[i]== 'T')
+			{
+				if(m->t->lineas[i]->largo > 1){
+					retroceder_avanzar_lineas(m,m->t->lineas[i],m->t->lineas[m->t->lineas[i]->goal]);
+				}else{
+					m->stats->lineas_candidatas[i] = 'F';					
+				}
+				//if(m->t->lineas[i]->largo <= 0)
+				//{
+				//}
+			}
+		}
+		if(k == 10000)
+		{
+			fprintf(stderr, "\n 10000 Desconecciones :O\n" );
+			break;
+		}
+	}
+	fprintf(stderr, "\n %d Desconecciones\n",k );
+}
+
+char linea_es_candidata(Master* m, Linea* l)
+{
+	int linea = l->number;
+	char r = 'F';
+	int j = 0;
+	if(m->stats->lineas_candidatas[linea] == 'T')
+	{
+		int z_cabeza = m->t->lineas[linea]->cabeza->z;
+		for(j = 0; j < m->l->zones[z_cabeza]->building_count ; j++)
+		{
+			if(!city_client_is_taken(m->l->zones[z_cabeza]->buildings[j]))
+			{
+				r = 'T';
+			}
+		}
+	}
+	return r;
+}
+
 void conectar_linea_alargar0(Master* m, Linea* l)
 {
 	if(l->isReady!='T' && l->dead!='T'){
@@ -557,6 +621,7 @@ void desenchufar_linea0(Master* m , int linea)
 	c2->link_count--;
 	c1->linked[1] = NULL;
 	c1->link_count--;
+	m->stats->conexiones_hechas--;
 	NodoBacktracking* n = pop_nodo_backtracking(l->actual);
 	n->z_index = 0;
 	n->c1_index = 0;
@@ -627,6 +692,7 @@ void limpiar_linea(Master* m , Linea* l)
 			c2->link_count--;
 			c1->linked[1] = NULL;
 			c1->link_count--;
+			m->stats->conexiones_hechas--;
 			NodoBacktracking* n = pop_nodo_backtracking(l->actual);
 			n->z_index = 0;
 			n->c1_index = 0;

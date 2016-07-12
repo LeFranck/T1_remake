@@ -19,6 +19,8 @@ Stats* create_stats(Telar* t)
 	r->edificios_faltantes = 0;
 	r->zonas_listas = 0;
 	r->zonas_faltantes = 0;
+	r->conexiones_hechas = 0;
+	r->lineas_candidatas = malloc(sizeof(char)*r->lineas_count);
 	return r;
 }
 
@@ -53,6 +55,7 @@ Stats* update_stats(Telar* t, Layout*  l, Stats* r)
 
 		if(t->lineas[i]->largo > 0)
 		{
+			r->lineas_candidatas[i] = 'T';
 			r->largo_promedio+=t->lineas[i]->largo;
 			if(t->lineas[i]->largo > r->largo_max)
 			{
@@ -64,6 +67,8 @@ Stats* update_stats(Telar* t, Layout*  l, Stats* r)
 				r->linea_mas_corta = i;
 				r->largo_min = t->lineas[i]->largo;
 			}
+		}else{
+			r->lineas_candidatas[i] = 'F';
 		}
 	}
 	r->largo_promedio = r->largo_promedio/(r->lineas_count / 2);
@@ -79,6 +84,7 @@ void print_stats(Stats* r)
 	fprintf(stderr, "El largo minimo es %d\n" , r-> largo_min);
 	fprintf(stderr, "El largo promedio de las linea es : %f" , r->largo_promedio);
 	fprintf(stderr, "\nDe las %d lineas hay:\n" , r->lineas_count);
+	fprintf(stderr, "\nConexiones: %d de %d\n" , r->conexiones_hechas, r->conexiones_max);	
 	fprintf(stderr, "\tReadys %d\n" , r->lineas_readys_count);
 	fprintf(stderr, "\tWaiting %d\n" , r->lineas_waiting_count);
 	fprintf(stderr, "\tMuertas%d\n" , r->lineas_muertas_count);
