@@ -477,6 +477,7 @@ void IA_dead_lines2(Master* m)
 			fprintf(stderr, "10000 ITERACIONES :O\n" );
 		}
 	}
+	fprintf(stderr, "\n%d Desconecciones :O\n",i );	
 }
 
 char solver_alargar_conection0(Master* m)
