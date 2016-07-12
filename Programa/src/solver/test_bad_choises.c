@@ -34,6 +34,12 @@ int main(int argc, char const *argv[])
 
 	m->stats = update_stats(m->t, m->l, m->stats);
 	print_stats(m->stats);
+	Linea* l1 = m->t->lineas[12];
+	Linea* l2 = m->t->lineas[l1->goal];
+	while(l1->largo > 1)
+	{
+		retroceder_avanzar_lineas(m, l1, l2);
+	}
 	//int i = 0;
 	//char r = solver_alargar_conection0(m);
 	//while(r != 'F')

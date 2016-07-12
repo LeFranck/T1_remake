@@ -426,8 +426,6 @@ void deal_with_dead_lines1(Master* m, int larga_number)
 	conectar_linea(m,larga_contraparte);
 }
 
-
-
 void IA_dead_lines0(Master* m)
 {
 	int i = 0;
@@ -474,7 +472,7 @@ void IA_dead_lines2(Master* m)
 		//fprintf(stderr, "itareacion %d\t number: %d\n",i,number );
 		i++;
 		if(i == 10000){
-			fprintf(stderr, "10000 ITERACIONES :O\n" );
+			fprintf(stderr, "10000 Desconecciones :O\n" );
 		}
 	}
 	fprintf(stderr, "\n%d Desconecciones :O\n",i );	
@@ -680,6 +678,37 @@ void descocer(Master* m)
 void Optimizar_largos(Master* m){}
 void AntiMonopolio(Master* m){}
 //------------------------------------		Vacios 		-----------------------------------------//
+
+//L1 retrocedera y l2 avanzara
+void retroceder_avanzar_lineas(Master* m, Linea* l1, Linea* l2)
+{
+	l1->actual = pop_nodo_backtracking(l1->actual);
+	if(l2->largo == 0)
+	{
+		l2->actual = create_nodo_backtracking(l2->number);
+	}
+	//Doy el mov a l2
+	l2->actual-> z_index = l1->actual-> z_index;
+	l2->actual-> c1_index = l1->actual-> c2_index;
+	l2->actual-> c2_index = l1->actual-> c1_index;	
+	
+	//Le quito el mov a l1
+	l1->actual-> z_index = 0;
+	l1->actual-> c1_index = 0;
+	l1->actual-> c2_index = 0;
+
+	NodoBacktracking* n = create_nodo_backtracking(l2->number);
+	l2->actual = push_nodo_backtracking(l2->actual, n);
+
+	NodoBacktracking* prev = l1->actual->prev;
+	int x =  m->l->zones[prev->z_index]->x;
+	int y =  m->l->zones[prev->z_index]->y;
+	Posicion* cabeza_nueva = create_posicion(prev->z_index, prev->c2_index,x,y);
+	l2->cabeza = cabeza_nueva;
+	l1->cabeza = cabeza_nueva;
+	l2->largo++;
+	l1->largo--;
+}
 
 void tejer_debug(Master* m, int l1, int l2)
 {

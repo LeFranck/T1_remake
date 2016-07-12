@@ -92,6 +92,7 @@ void retroceder_linea(Master* m, Linea* l);
 void tejer_debug(Master* m, int l1, int l2);
 void tejer_inverso(Master* m);
 void clean_dead_lines(Master* m);
+void retroceder_avanzar_lineas(Master* m, Linea* l1, Linea* l2);
 
 //------------------------------------		VACIOS	 	-----------------------------------------//
 
