@@ -4,6 +4,7 @@
 #include "../common/telar.h"
 #include "../common/solucion.h"
 #include "../common/master.h"
+#include <time.h>
 #include <stdio.h>
 
 int main(int argc, char const *argv[])
@@ -15,6 +16,7 @@ int main(int argc, char const *argv[])
 	city_layout_print(layout);
 
 	/* TODO RESOLVER PROBLEMA */
+	clock_t begin = clock();
 	Master* m = create_master(layout);
 	ordenar_colores(m->t);
 	juntar_lineas_por_color(m);
@@ -76,7 +78,11 @@ int main(int argc, char const *argv[])
 	//conectar_linea(m,m->t->lineas[0]);
 	//set_lines_goals(m->t);
 	//tejer(m);
+	/* here, do your time-consuming job */
 
+	clock_t end = clock();
+	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+	fprintf(stderr, "TIEMPO TOTAL %f\n",time_spent );
 	//conectar_linea(m,m->t->lineas[2]);
 	/* TODO IMPRIMIR DECISIONES */
 	//print_solucion_output_parcial(m->s);

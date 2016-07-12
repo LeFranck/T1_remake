@@ -528,7 +528,7 @@ void solver_alargar_conexiones(Master* m)
 				//}
 			}
 		}
-		if(k == 10000)
+		if(k == 12)
 		{
 			fprintf(stderr, "\n 10000 Desconecciones :O\n" );
 			break;
