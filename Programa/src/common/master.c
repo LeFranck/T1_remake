@@ -464,16 +464,18 @@ void IA_dead_lines2(Master* m)
    		srand((unsigned) time(&t));
 		int random =  rand() % m->t->lineas_count ;
    		int number = ((random + i )%m->t->lineas_count);
-   		while(m->t->lineas[number]->largo <= 0)
+   		while(m->t->lineas[number]->largo <= 1)
    		{
    			random = rand() % m->t->lineas_count ;
    			number = ((random + i )%m->t->lineas_count);
    		}
 		deal_with_dead_lines1(m, number);
 		m->stats = update_stats(m->t, m->l, m->stats);
-		fprintf(stderr, "itareacion %d\t number: %d\n",i,number );
+		//fprintf(stderr, "itareacion %d\t number: %d\n",i,number );
 		i++;
-		if(i == 1000){m->stats->lineas_muertas_count = 0;}
+		if(i == 10000){
+			fprintf(stderr, "10000 ITERACIONES :O\n" );
+		}
 	}
 }
 
