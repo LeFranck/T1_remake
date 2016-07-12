@@ -29,22 +29,39 @@ int main(int argc, char const *argv[])
 	clean_dead_lines(m);
 	tejer(m);
 
+	fprintf(stderr, "STATS TEJIDO\n");
 	m->stats = update_stats(m->t, m->l, m->stats);
 	print_stats(m->stats);
 
 	solve_deads_lines(m,2);
+	fprintf(stderr, "STATS SOLVE DEAD LINES\n");	
 	m->stats = update_stats(m->t, m->l, m->stats);
 	print_stats(m->stats);
+
+	char r = solver_alargar_conection0(m);
+	int k = 0;
+	while(r != 'F')
+	{
+		r = solver_alargar_conection0(m);
+		if(r != 'F')
+		{
+			k++;
+		}
+	}
+	fprintf(stderr, "\n %d Desconecciones\n",k );
+	fprintf(stderr, "STATS ALARGAR CONECCIONES 0\n");
+	m->stats = update_stats(m->t, m->l, m->stats);
+	print_stats(m->stats);
+	//solver_alargar_conection0(m);
+
+
 	solver_alargar_conexiones(m);
+	fprintf(stderr, "STATS ALARGAR CONECCIONES FINAL\n");
 	m->stats = update_stats(m->t, m->l, m->stats);
 	print_stats(m->stats);
 
 	//int i = 0;
-	//char r = solver_alargar_conection0(m);
-	//while(r != 'F')
-	//{
-		//r = solver_alargar_conection0(m);
-	//}
+
 	//m->stats = update_stats(m->t, m->l, m->stats);
 	//print_stats(m->stats);
 

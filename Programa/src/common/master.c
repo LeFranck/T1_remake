@@ -206,6 +206,8 @@ void retroceder_linea(Master* m, Linea* l)
 		l->cabeza->y = m->l->zones[z]->y;
 		//Actualizo en nodo_op
 		NodoBacktracking* nod = malloc(sizeof(NodoBacktracking));
+		//MIEDO 
+		//nod->prev = pop_nodo_backtracking(l->actual);
 		nod = pop_nodo_backtracking(l->actual);
 		//free(l->actual);
 		l->actual = nod;
@@ -472,8 +474,8 @@ void IA_dead_lines2(Master* m)
 		m->stats = update_stats(m->t, m->l, m->stats);
 		//fprintf(stderr, "itareacion %d\t number: %d\n",i,number );
 		i++;
-		if(i == 10000){
-			fprintf(stderr, "10000 Desconecciones :O\n" );
+		if(i == 20000){
+			fprintf(stderr, "20000 Desconecciones :O\n" );
 		}
 	}
 	fprintf(stderr, "\n%d Desconecciones :O\n",i );	
@@ -518,7 +520,7 @@ void solver_alargar_conexiones(Master* m)
 		{
 			if(m->stats->lineas_candidatas[i]== 'T')
 			{
-				if(m->t->lineas[i]->largo > 1){
+				if(m->t->lineas[i]->largo > 3){
 					retroceder_avanzar_lineas(m,m->t->lineas[i],m->t->lineas[m->t->lineas[i]->goal]);
 				}else{
 					m->stats->lineas_candidatas[i] = 'F';					
