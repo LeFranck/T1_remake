@@ -677,3 +677,81 @@ void descocer(Master* m)
 void Optimizar_largos(Master* m){}
 void AntiMonopolio(Master* m){}
 //------------------------------------		Vacios 		-----------------------------------------//
+
+void tejer_debug(Master* m, int l1, int l2)
+{
+	int i = 0;
+	for(i = 0; i < m->t->lineas_count; i++)
+	{
+		//Si la meta de la linea esta ok
+		if(m->t->lineas[m->t->lineas[i]->goal]->isReady == 'T' || m->t->lineas[m->t->lineas[i]->goal]->dead == 'T')
+		{
+			//fprintf(stderr,"La meta de la linea %d esta ok \n",i);
+			//Si la linea no esta ok
+			if(m->t->lineas[i]->isReady != 'T' && m->t->lineas[i]->dead != 'T')
+			{
+				//Cambio la meta de la linea
+				////fprintf(stderr,"Linea %d, meta: %d tomada\nPosicion meta ",i, m->t->lineas[i]->goal );
+				//print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
+				////fprintf(stderr,"RESET GOAL xq linea is%c\n",m->t->lineas[i]->isReady);
+				reset_goal_linea(m->t,m->t->lineas[i]);
+				////fprintf(stderr,"Nueva posicion meta\n" );
+				print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
+			}
+		}
+		////fprintf(stderr,"\nLinea %d, meta: %d\n",i, m->t->lineas[i]->goal);
+		print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
+		if(i != l1 && i != l2){
+			conectar_linea(m, m->t->lineas[i]);			
+		}
+		//fprintf(stderr,"\n\n");
+	}
+}
+
+void tejer_inverso(Master* m)
+{
+	int i = 0;
+	for(i = m->t->lineas_count-1; i > 0; i--)
+	{
+		//Si la meta de la linea esta ok
+		if(m->t->lineas[m->t->lineas[i]->goal]->isReady == 'T' || m->t->lineas[m->t->lineas[i]->goal]->dead == 'T')
+		{
+			//fprintf(stderr,"La meta de la linea %d esta ok \n",i);
+			//Si la linea no esta ok
+			if(m->t->lineas[i]->isReady != 'T' && m->t->lineas[i]->dead != 'T')
+			{
+				//Cambio la meta de la linea
+				////fprintf(stderr,"Linea %d, meta: %d tomada\nPosicion meta ",i, m->t->lineas[i]->goal );
+				//print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
+				////fprintf(stderr,"RESET GOAL xq linea is%c\n",m->t->lineas[i]->isReady);
+				reset_goal_linea(m->t,m->t->lineas[i]);
+				////fprintf(stderr,"Nueva posicion meta\n" );
+				print_posicion(m->t->lineas[m->t->lineas[i]->goal]->cabeza);
+			}
+		}
+		////fprintf(stderr,"\nLinea %d, meta: %d\n",i, m->t->lineas[i]->goal);
+		conectar_linea(m, m->t->lineas[i]);			
+		//fprintf(stderr,"\n\n");
+	}
+}
+
+void clean_dead_lines(Master* m)
+{
+	int i =0;
+	for(i = 0; i < m->t->lineas_count; i++)
+	{
+		Linea* linea = m->t->lineas[i];
+		if(linea->dead == 'T')
+		{
+			limpiar_linea(m,linea);
+		}
+	}
+	for(i = 0; i < m->t->lineas_count; i++)
+	{
+		Linea* linea = m->t->lineas[i];
+		if(m->t->estados_de_lineas[i] == 'W')
+		{
+			reset_goal_linea(m->t, linea);
+		}
+	}
+}

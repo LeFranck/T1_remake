@@ -21,22 +21,28 @@ int main(int argc, char const *argv[])
 	set_lines_goals(m->t);
 	//solve_puzzle(m, 'l');
 	print_telar(m->t);
-	tejer(m);
 	//conectar_linea(m,m->t->lineas[0]);
 	//conectar_linea(m,m->t->lineas[1]);
 	//conectar_linea(m,m->t->lineas[2]);
 	//conectar_linea(m,m->t->lineas[3]);
+	tejer(m);
+	clean_dead_lines(m);
+	tejer_inverso(m);
+	clean_dead_lines(m);
+	tejer(m);
+
 	m->stats = update_stats(m->t, m->l, m->stats);
 	print_stats(m->stats);
-	solve_deads_lines(m,2);
-	int i = 0;
-	char r = solver_alargar_conection0(m);
-	while(r != 'F')
-	{
-		r = solver_alargar_conection0(m);
-	}
-	m->stats = update_stats(m->t, m->l, m->stats);
-	print_stats(m->stats);
+
+	//solve_deads_lines(m,2);
+	//int i = 0;
+	//char r = solver_alargar_conection0(m);
+	//while(r != 'F')
+	//{
+		//r = solver_alargar_conection0(m);
+	//}
+	//m->stats = update_stats(m->t, m->l, m->stats);
+	//print_stats(m->stats);
 
 	//deal_with_dead_lines(m);
 	//fprintf(stderr, "----------------------------------\n" );
