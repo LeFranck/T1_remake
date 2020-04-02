@@ -1,3 +1,5 @@
+Solver for "sudoku/pipes" problems, made in C for Data structures and algorithms class
+
 Version 3.0 de la Tarea
 Resuelve field en 5.5 sec :):):)
 
