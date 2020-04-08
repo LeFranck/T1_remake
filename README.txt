@@ -1,13 +1,13 @@
-Solver for "sudoku/pipes" problems, made in C for Data structures and algorithms class
+How to run it:
 
-Version 3.0 de la Tarea
-Resuelve field en 5.5 sec :):):)
+0) Run make in /Program folder
+1) If 0) give the error missing gtk, run: apt-get install libgtk-3-dev
+2) Pick a file to test from tests folder (The visual representation of the files are in easys, normals, hards, lunatics)
+3) Run:   ./solver < file_to_solve.txt | ./watcher 
 
-El proceso final esta en el archivo solver.c
+The program has to connect the nucleus of the same colors through pipes and use the full network of possibles pipes while doing it. 
 
-Lamentablemente no tiene el algoritmo para las lineas flotantes.
-Era, conecta desde las lineas alimentadas hacias las no alimentadas
-Una vez que se conecte con una linea no alimentada, el otro lado de 
-la linea flotante(que es una linea tambien) pasara a la lista de 
-lineas alimentadas que deben de ser conectadas con lineas no alimentadas
-El resto del algoritmo sigue igual
+The solution has two processes
+  First:  connect all the nucleus
+  Second: Disconnect pipes and reconnect pipes to use the full network, using backtracking
+  
